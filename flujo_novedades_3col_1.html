@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestión de Novedades — Vista Gerencial</title>
+<title>Gestión de Novedades</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -233,7 +233,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 <!-- HEADER -->
 <div class="header">
   <div class="h-left">
-    <h1>Gestión de Novedades — Talento Humano</h1>
+    <h1>Gestión de Novedades</h1>
 
   </div>
   <div class="h-meta">
@@ -604,10 +604,8 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 </div>
 
 <script>
-// ─── CONFIGURACIÓN ────────────────────────────────────────────────
-// Pega aquí la URL de tu Apps Script Web App después de publicarla
-const APPS_SCRIPT_URL = 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT';
-// ──────────────────────────────────────────────────────────────────
+// ─── STORAGE KEY ──────────────────────────────────────────────────
+const STORAGE_KEY = 'pdi007_novedades_statuses';
 
 const RULES_DEFAULT = [
   { code: 'R0a', name: 'Permiso Remunerado',         status: 'pend' },
@@ -623,14 +621,13 @@ const RULES_DEFAULT = [
 ];
 
 let rules = RULES_DEFAULT.map(r => ({ ...r }));
-let saving = false;
 
 const labels    = { live: '✅ Funcional', dev: '🔧 En desarrollo', pend: '⏳ Pendiente' };
 const pillClass = { live: 'sp-live', dev: 'sp-dev', pend: 'sp-pend' };
 const dotClass  = { live: 'sd-live', dev: 'sd-dev', pend: 'sd-pend' };
 const order     = ['live', 'dev', 'pend'];
 
-// ── Indicador de conexión ──────────────────────────────────────────
+// ── Indicador ─────────────────────────────────────────────────────
 function setIndicator(state, msg) {
   const el = document.getElementById('sync-indicator');
   if (!el) return;
@@ -639,44 +636,40 @@ function setIndicator(state, msg) {
   el.textContent = msg;
 }
 
-// ── Leer estados desde Google Sheets ──────────────────────────────
-async function loadFromSheets() {
-  if (APPS_SCRIPT_URL === 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT') {
-    setIndicator('error', '⚠️ Configura la URL del script');
-    render(); return;
-  }
-  setIndicator('loading', '⏳ Cargando...');
+// ── Cargar desde localStorage ──────────────────────────────────────
+function loadFromStorage() {
   try {
-    const res = await fetch(APPS_SCRIPT_URL + '?action=get');
-    const data = await res.json();
-    if (data.statuses) {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const statuses = JSON.parse(saved);
       rules.forEach(r => {
-        if (data.statuses[r.code]) r.status = data.statuses[r.code];
+        if (statuses[r.code]) r.status = statuses[r.code];
       });
-      setIndicator('ok', '🟢 Sincronizado');
+      const ts = localStorage.getItem(STORAGE_KEY + '_ts');
+      const hora = ts ? new Date(parseInt(ts)).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : '';
+      setIndicator('ok', '🟢 Estados guardados' + (hora ? ' · ' + hora : ''));
+    } else {
+      setIndicator('ok', '🟢 Estados por defecto');
     }
   } catch (e) {
-    setIndicator('error', '🔴 Sin conexión — modo local');
+    setIndicator('error', '⚠️ Error al leer estados');
   }
   render();
 }
 
-// ── Guardar estado en Google Sheets ───────────────────────────────
-async function saveToSheets(code, status) {
-  if (APPS_SCRIPT_URL === 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT') return;
-  saving = true;
-  setIndicator('saving', '💾 Guardando...');
+// ── Guardar en localStorage ────────────────────────────────────────
+function saveToStorage(code, status) {
   try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'set', code, status })
-    });
-    setIndicator('ok', '🟢 Guardado · ' + new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }));
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const statuses = saved ? JSON.parse(saved) : {};
+    statuses[code] = status;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(statuses));
+    localStorage.setItem(STORAGE_KEY + '_ts', Date.now().toString());
+    const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    setIndicator('ok', '💾 Guardado · ' + hora);
   } catch (e) {
-    setIndicator('error', '🔴 Error al guardar');
+    setIndicator('error', '⚠️ Error al guardar');
   }
-  saving = false;
 }
 
 // ── Contadores ─────────────────────────────────────────────────────
@@ -717,23 +710,19 @@ function render() {
   });
 
   body.querySelectorAll('.status-pill').forEach(pill => {
-    pill.addEventListener('click', async () => {
-      if (saving) return;
+    pill.addEventListener('click', () => {
       const idx = parseInt(pill.dataset.idx);
       rules[idx].status = nextStatus(rules[idx].status);
+      saveToStorage(rules[idx].code, rules[idx].status);
       render();
       updateCounts();
-      await saveToSheets(rules[idx].code, rules[idx].status);
     });
   });
   updateCounts();
 }
 
-// ── Auto-refresco cada 30 segundos ─────────────────────────────────
-setInterval(loadFromSheets, 30000);
-
 // ── Inicio ─────────────────────────────────────────────────────────
-loadFromSheets();
+loadFromStorage();
 </script>
 </body>
 </html>
