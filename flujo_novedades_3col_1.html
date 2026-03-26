@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestión de Novedades — Vista Gerencial</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0F1117; --ink-2: #363848; --ink-3: #7A7D8F; --ink-4: #C0C2D0;
+  --bg: #F0F1F6; --card: #FFFFFF; --border: #E4E5EE;
+  --green:  #0D9F6E; --green-bg:  #E6F7F1; --green-b:  #8FDCC0;
+  --purple: #5B4FD4; --purple-bg: #ECEAFB; --purple-b: #B0A8EE;
+  --amber:  #C07314; --amber-bg:  #FBF0E0; --amber-b:  #F0C370;
+  --blue:   #1A6DB5; --blue-bg:   #E6F0FA; --blue-b:   #88BAE8;
+  --red:    #C0392B; --red-bg:    #FCECEA; --red-b:    #F0A090;
+  --violet: #6D28D9; --violet-bg: #F0EBFD; --violet-b: #C4B0F5;
+  --teal:   #0A7B65; --teal-bg:   #E3F7F3; --teal-b:   #7DDEC8;
+  --rose:   #B5265A; --rose-bg:   #FCEEF4; --rose-b:   #F0A0C0;
+  --indigo: #3730A3; --indigo-bg: #EEF2FF; --indigo-b: #A5B4FC;
+  --yellow-bg: #FEFAE6; --yellow-b: #F0DC78; --yellow-ink: #7A5E00;
+  --live-bg: #E6F7F1; --live-b: #8FDCC0; --live: #0D9F6E;
+  --dev-bg:  #FBF0E0; --dev-b:  #F0C370; --dev:  #C07314;
+  --pend-bg: #F4F5FA; --pend-b: #D0D2E0; --pend: #7A7D8F;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); padding: 28px 24px; }
+.page { max-width: 1300px; margin: 0 auto; }
+
+/* ── HEADER ── */
+.header { margin-bottom: 24px; padding-bottom: 18px; border-bottom: 2px solid var(--border); display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+.h-left h1 { font-size: 20px; font-weight: 700; letter-spacing: -.4px; }
+.h-left p  { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+.h-meta { display: flex; gap: 20px; flex-shrink: 0; }
+.meta .lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-4); }
+.meta .val { font-size: 12px; font-weight: 600; color: var(--ink-2); margin-top: 1px; }
+
+/* ── LEGEND ── */
+.legend { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.leg-item { display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; border: 1px solid; font-size: 10px; font-weight: 600; }
+.leg-live  { background: var(--live-bg); border-color: var(--live-b); color: var(--live); }
+.leg-dev   { background: var(--dev-bg);  border-color: var(--dev-b);  color: var(--dev); }
+.leg-pend  { background: var(--pend-bg); border-color: var(--pend-b); color: var(--pend); }
+.leg-dot   { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── 3-COLUMN LAYOUT ── */
+.layout { display: grid; grid-template-columns: 200px 1fr 180px; gap: 16px; align-items: start; }
+
+/* ── LEFT: SPINE ── */
+.spine-col {
+  position: sticky; top: 20px;
+  background: var(--card); border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  padding: 16px 0; overflow: hidden;
+}
+.spine-zone {
+  font-size: 8px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; padding: 5px 14px; margin: 4px 0;
+  text-align: center;
+}
+.sz-in { background: var(--green-bg); color: var(--green); }
+.sz-pr { background: var(--purple-bg); color: var(--purple); }
+.sz-sa { background: var(--amber-bg); color: var(--amber); }
+
+.spine-steps { position: relative; padding: 0 14px; }
+.spine-steps::before {
+  content: ''; position: absolute;
+  top: 0; bottom: 0; left: 34px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--green-b) 0%, var(--purple-b) 55%, var(--amber-b) 100%);
+  z-index: 0;
+}
+.spine-step {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; position: relative; z-index: 1;
+}
+.ss-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid; flex-shrink: 0;
+  background: white; box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  position: relative;
+}
+.ss-num {
+  position: absolute; bottom: -2px; right: -2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  font-size: 8px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid white;
+}
+.si-in { border-color: var(--green); } .sn-in { background: var(--green);  color: white; }
+.si-pr { border-color: var(--purple); } .sn-pr { background: var(--purple); color: white; }
+.si-sa { border-color: var(--amber); }  .sn-sa { background: var(--amber);  color: white; }
+.ss-text { flex: 1; }
+.ss-title { font-size: 10px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.ss-sub   { font-size: 8.5px; color: var(--ink-3); margin-top: 2px; line-height: 1.35; }
+
+/* PARALLEL BOX in spine */
+.spine-par { position: relative; z-index: 1; margin: 4px 0; }
+.spine-par::before { content: ''; position: absolute; top: 30px; left: 20px; right: 0; height: 1.5px; background: var(--purple-b); z-index: 0; }
+.spine-par-row { display: flex; gap: 8px; }
+.spine-par-item {
+  flex: 1; padding: 8px 8px 8px 0;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+}
+.spine-par-circle {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--purple);
+  background: white; position: relative;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08); flex-shrink: 0; z-index: 1;
+}
+.spine-par-num {
+  position: absolute; bottom: -2px; right: -2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  font-size: 8px; font-weight: 700; background: var(--purple); color: white;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid white;
+}
+.spine-par-label { font-size: 9px; font-weight: 600; color: var(--purple); line-height: 1.3; padding-left: 2px; }
+.par-badge { text-align: center; font-size: 7.5px; font-weight: 600; color: var(--purple); text-transform: uppercase; letter-spacing: .06em; background: var(--purple-bg); border: 1px solid var(--purple-b); border-radius: 4px; padding: 2px 6px; margin: 0 14px 8px; }
+
+/* ── CENTER: MODULES ── */
+.center-col { display: flex; flex-direction: column; gap: 16px; }
+
+.module-card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.04); overflow: hidden; }
+.module-header { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--border); }
+.mod-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mod-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+.mod-sub   { font-size: 9.5px; color: var(--ink-3); margin-top: 1px; }
+.mod-badge { margin-left: auto; font-size: 8.5px; font-weight: 700; padding: 3px 9px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+
+.rules-grid { padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; }
+.rule { display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: start; padding-bottom: 12px; border-bottom: 1px solid #F0F0F6; }
+.rule:last-child { border-bottom: none; padding-bottom: 0; }
+.rule-icon-col { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.rule-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+.rule-code { font-size: 7.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--ink-4); }
+.rule-title { font-size: 11.5px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
+
+.d-chain { display: flex; flex-direction: column; gap: 5px; }
+.d-row   { display: flex; align-items: flex-start; gap: 7px; }
+.diamond { position: relative; width: 54px; height: 52px; flex-shrink: 0; }
+.diamond-shape { position: absolute; top: 6px; left: 7px; width: 38px; height: 38px; transform: rotate(45deg); border-radius: 4px; }
+.diamond-text  { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 7.5px; font-weight: 600; text-align: center; line-height: 1.2; padding: 2px 8px; z-index: 1; }
+.dm-purple .diamond-shape { background: var(--purple-bg); border: 1.5px solid var(--purple-b); }
+.dm-purple .diamond-text  { color: var(--purple); }
+.dm-rose   .diamond-shape { background: var(--rose-bg); border: 1.5px solid var(--rose-b); }
+.dm-rose   .diamond-text  { color: var(--rose); }
+
+.branches { display: flex; flex-direction: column; gap: 4px; flex: 1; padding-top: 3px; }
+.branch   { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.b-cond   { font-size: 8.5px; color: var(--ink-3); min-width: 50px; white-space: nowrap; }
+.b-arr    { color: var(--ink-4); font-size: 11px; flex-shrink: 0; }
+
+.badge { font-size: 9.5px; font-weight: 500; padding: 3px 9px; border-radius: 5px; border: 1px solid; display: inline-flex; align-items: center; gap: 4px; line-height: 1.3; }
+.bg-block { background: var(--red-bg);    border-color: var(--red-b);    color: var(--red); }
+.bg-slack { background: var(--violet-bg); border-color: var(--violet-b); color: var(--violet); }
+.bg-tpm   { background: var(--blue-bg);   border-color: var(--blue-b);   color: var(--blue); }
+.bg-disc  { background: var(--red-bg);    border-color: var(--red-b);    color: var(--red); }
+.bg-wa    { background: var(--amber-bg);  border-color: var(--amber-b);  color: var(--amber); }
+.bg-nom   { background: var(--green-bg);  border-color: var(--green-b);  color: var(--green); }
+.bg-mon   { background: #F4F5FA;          border-color: #DDDEE8;         color: var(--ink-3); }
+.bg-ret   { background: var(--yellow-bg); border-color: var(--yellow-b); color: var(--yellow-ink); }
+.bg-ger   { background: var(--teal-bg);   border-color: var(--teal-b);   color: var(--teal); }
+.bg-jefe  { background: var(--indigo-bg); border-color: var(--indigo-b); color: var(--indigo); }
+.bg-notif { background: var(--rose-bg);   border-color: var(--rose-b);   color: var(--rose); }
+
+.sub-decision { display: flex; flex-direction: column; gap: 3px; padding-left: 10px; border-left: 2px solid var(--purple-b); margin-top: 2px; }
+.sub-row      { display: flex; align-items: center; gap: 4px; }
+.direct-row   { display: flex; align-items: center; gap: 7px; padding: 3px 0; flex-wrap: wrap; }
+.direct-lbl   { font-size: 8.5px; color: var(--ink-4); font-style: italic; }
+.flow-row     { display: flex; align-items: flex-start; gap: 7px; flex-wrap: wrap; margin-bottom: 5px; }
+.flow-arr     { color: var(--ink-4); font-size: 12px; padding-top: 4px; }
+.step-chain   { display: flex; flex-direction: column; gap: 5px; }
+.sc-row       { display: flex; align-items: center; gap: 7px; }
+.sc-num       { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8.5px; font-weight: 700; flex-shrink: 0; }
+.v-arr        { padding-left: 9px; color: var(--ink-4); font-size: 10px; }
+
+.trigger-note { margin-top: 5px; padding: 6px 10px; background: var(--rose-bg); border: 1px dashed var(--rose-b); border-radius: 7px; display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--rose); font-weight: 500; }
+
+/* ── RIGHT: STATUS ── */
+.status-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 20px; }
+
+.status-card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.04); overflow: hidden; }
+.status-header { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; letter-spacing: .08em; display: flex; align-items: center; gap: 6px; }
+.status-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+
+.status-row { display: flex; flex-direction: column; gap: 4px; }
+.status-rule-name { font-size: 9.5px; font-weight: 600; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+.status-rule-code { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--ink-4); }
+
+.status-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 7px; border: 1px solid;
+  font-size: 9px; font-weight: 600; cursor: pointer;
+  transition: all .15s; user-select: none;
+}
+.status-pill:hover { filter: brightness(.95); }
+.sp-live  { background: var(--live-bg);  border-color: var(--live-b);  color: var(--live); }
+.sp-dev   { background: var(--dev-bg);   border-color: var(--dev-b);   color: var(--dev); }
+.sp-pend  { background: var(--pend-bg);  border-color: var(--pend-b);  color: var(--pend); }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.sd-live { background: var(--live); }
+.sd-dev  { background: var(--dev); }
+.sd-pend { background: var(--pend); }
+
+.status-divider { height: 1px; background: var(--border); }
+
+.status-summary {
+  background: var(--card); border-radius: 14px; border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,.04); padding: 14px;
+}
+.ss-title { font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+.ss-stat  { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #F0F0F6; }
+.ss-stat:last-child { border-bottom: none; }
+.ss-stat-lbl { font-size: 10px; color: var(--ink-3); }
+.ss-stat-val { font-size: 14px; font-weight: 700; }
+.sv-live { color: var(--live); }
+.sv-dev  { color: var(--dev); }
+.sv-pend { color: var(--pend); }
+
+/* ROLES */
+.roles-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding-top: 16px; border-top: 1px solid var(--border); }
+.role-pill  { display: flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 30px; background: var(--card); border: 1px solid var(--border); font-size: 10px; font-weight: 500; color: var(--ink-2); }
+.role-dot   { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="h-left">
+    <h1>Gestión de Novedades — Talento Humano</h1>
+    <p>Flujo operativo · ~2.300 colaboradores · 3 centros de producción</p>
+  </div>
+  <div class="h-meta">
+    <div class="meta"><div class="lbl">Sponsor</div><div class="val">Juan Álvarez</div></div>
+    <div class="meta"><div class="lbl">Sector</div><div class="val">Manufactura Confitería</div></div>
+    <div class="meta"><div class="lbl">Plataforma</div><div class="val">.NET + Snowflake</div></div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="leg-item leg-live"><div class="leg-dot" style="background:var(--live)"></div>✅ Funcional en producción</div>
+  <div class="leg-item leg-dev"><div class="leg-dot" style="background:var(--dev)"></div>🔧 En desarrollo</div>
+  <div class="leg-item leg-pend"><div class="leg-dot" style="background:var(--pend)"></div>⏳ Pendiente</div>
+</div>
+
+<div class="layout">
+
+  <!-- ══ LEFT: SPINE ══ -->
+  <div class="spine-col">
+    <div class="spine-zone sz-in">Entrada</div>
+    <div class="spine-steps">
+
+      <div class="spine-step">
+        <div class="ss-icon si-in">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D9F6E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span class="ss-num sn-in">1</span>
+        </div>
+        <div class="ss-text"><div class="ss-title">Programación de colaboradores</div><div class="ss-sub">Cargada para la semana siguiente</div></div>
+      </div>
+
+      <div class="spine-step">
+        <div class="ss-icon si-in">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D9F6E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2z"/><path d="M12 14c-6 0-9 2.5-9 4v1h18v-1c0-1.5-3-4-9-4z"/></svg>
+          <span class="ss-num sn-in">2</span>
+        </div>
+        <div class="ss-text"><div class="ss-title">Lectura biométrica</div><div class="ss-sub">Entrada (1) · Salida (2)</div></div>
+      </div>
+
+      <div class="spine-step">
+        <div class="ss-icon si-in">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D9F6E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span class="ss-num sn-in">3</span>
+        </div>
+        <div class="ss-text"><div class="ss-title">Consolidación</div><div class="ss-sub">Programación | Biométrica</div></div>
+      </div>
+
+    </div>
+
+    <div class="spine-zone sz-pr">Proceso</div>
+    <div class="spine-steps">
+
+      <div class="spine-step">
+        <div class="ss-icon si-pr">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+          <span class="ss-num sn-pr">4</span>
+        </div>
+        <div class="ss-text"><div class="ss-title">Ingreso al aplicativo</div><div class="ss-sub">Gestión de Novedades</div></div>
+      </div>
+
+      <!-- PARALELO -->
+      <div class="spine-par">
+        <div class="spine-par-row">
+          <div class="spine-par-item">
+            <div class="spine-par-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <span class="spine-par-num">5</span>
+            </div>
+            <div class="spine-par-label">Justificación Inasistencias</div>
+          </div>
+          <div class="spine-par-item">
+            <div class="spine-par-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="spine-par-num">6</span>
+            </div>
+            <div class="spine-par-label">Validación Horas Adicionales</div>
+          </div>
+        </div>
+        <div class="par-badge">Paralelo</div>
+      </div>
+
+    </div>
+
+    <div class="spine-zone sz-sa">Salida</div>
+    <div class="spine-steps">
+
+      <div class="spine-step">
+        <div class="ss-icon si-sa">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C07314" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          <span class="ss-num sn-sa">7</span>
+        </div>
+        <div class="ss-text"><div class="ss-title">Tabla Novedades</div><div class="ss-sub">Escrita en Snowflake</div></div>
+      </div>
+
+      <div class="spine-step">
+        <div class="ss-icon si-sa">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C07314" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+          <span class="ss-num sn-sa">8</span>
+        </div>
+        <div class="ss-text"><div class="ss-title">Talento Humano</div><div class="ss-sub">Liquida nómina</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ CENTER: MODULES ══ -->
+  <div class="center-col">
+
+    <!-- MÓDULO 0 -->
+    <div class="module-card">
+      <div class="module-header" style="background:linear-gradient(135deg,var(--rose-bg),#fff)">
+        <div class="mod-icon" style="background:var(--rose-bg);border:1.5px solid var(--rose-b)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B5265A" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+        <div><div class="mod-title">Módulo 0 — Solicitud de Permisos</div><div class="mod-sub">Admin. de Producción registra · Jefe de Producción aprueba</div></div>
+        <div class="mod-badge" style="background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-b)">PRE-FLUJO</div>
+      </div>
+      <div class="rules-grid">
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--indigo-bg);border:1.5px solid var(--indigo-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3730A3" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><span class="rule-code">R0a</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Permiso Remunerado</div>
+            <div class="d-chain">
+              <div class="flow-row"><span class="badge" style="background:var(--purple-bg);border-color:var(--purple-b);color:var(--purple)">Admin. registra</span><span class="flow-arr">→</span><span class="badge bg-jefe">Jefe de Producción revisa</span></div>
+              <div class="d-row">
+                <div class="diamond dm-rose"><div class="diamond-shape"></div><div class="diamond-text">¿Decisión?</div></div>
+                <div class="branches">
+                  <div class="branch"><span class="b-cond">✅ Aprueba</span><span class="b-arr">→</span><span class="badge bg-nom">Permiso registrado · Nómina lo paga</span></div>
+                  <div class="branch"><span class="b-cond">❌ Rechaza</span><span class="b-arr">→</span><span class="badge bg-mon">Cierra sin registro</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--rose-bg);border:1.5px solid var(--rose-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B5265A" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div><span class="rule-code">R0b</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Permiso No Remunerado</div>
+            <div class="d-chain">
+              <div class="flow-row"><span class="badge" style="background:var(--purple-bg);border-color:var(--purple-b);color:var(--purple)">Admin. registra</span><span class="flow-arr">→</span><span class="badge bg-jefe">Jefe de Producción revisa</span></div>
+              <div class="d-row">
+                <div class="diamond dm-rose"><div class="diamond-shape"></div><div class="diamond-text">¿Decisión?</div></div>
+                <div class="branches">
+                  <div class="branch"><span class="b-cond">✅ Aprueba</span><span class="b-arr">→</span><span class="badge bg-ret">Permiso registrado · Nómina no paga</span></div>
+                  <div class="branch"><span class="b-cond">❌ Rechaza</span><span class="b-arr">→</span><span class="badge bg-mon">Cierra sin registro</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÓDULO 1 -->
+    <div class="module-card">
+      <div class="module-header" style="background:linear-gradient(135deg,var(--purple-bg),#fff)">
+        <div class="mod-icon" style="background:var(--purple-bg);border:1.5px solid var(--purple-b)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div><div class="mod-title">Módulo 1 — Justificación de Inasistencias</div><div class="mod-sub">Admin. de Producción · Paso 5 del flujo</div></div>
+        <div class="mod-badge" style="background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-b)">PASO 5</div>
+      </div>
+      <div class="rules-grid">
+        <!-- R1 -->
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--red-bg);border:1.5px solid var(--red-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><line x1="17" y1="11" x2="23" y2="11"/></svg></div><span class="rule-code">R1</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Inasistencia — Problema de IRIS</div>
+            <div class="d-chain">
+              <div class="d-row">
+                <div class="diamond dm-purple"><div class="diamond-shape"></div><div class="diamond-text">¿Evidencia adjunta?</div></div>
+                <div class="branches">
+                  <div class="branch"><span class="b-cond">No</span><span class="b-arr">→</span><span class="badge bg-block">🚫 Sistema bloquea</span></div>
+                  <div class="branch" style="align-items:flex-start">
+                    <span class="b-cond" style="padding-top:3px">Sí</span><span class="b-arr" style="padding-top:3px">→</span>
+                    <div style="display:flex;flex-direction:column;gap:4px">
+                      <span class="badge bg-slack">📨 Slack al Gerente + link</span>
+                      <div class="sub-decision">
+                        <div class="sub-row"><span class="b-cond">✅ Aprueba</span><span class="b-arr">→</span><span class="badge bg-nom">Novedad a Snowflake</span></div>
+                        <div class="sub-row"><span class="b-cond">❌ Rechaza</span><span class="b-arr">→</span><span class="badge bg-ret">Regresa a justificación</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- R2 -->
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--blue-bg);border:1.5px solid var(--blue-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A6DB5" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="rule-code">R2</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Llegada tarde</div>
+            <div class="d-row">
+              <div class="diamond dm-purple"><div class="diamond-shape"></div><div class="diamond-text">¿Veces este mes?</div></div>
+              <div class="branches">
+                <div class="branch"><span class="b-cond">1 vez</span><span class="b-arr">→</span><span class="badge bg-tpm">TPM — llamado al desempeño</span></div>
+                <div class="branch"><span class="b-cond">≥ 2 veces</span><span class="b-arr">→</span><span class="badge bg-disc">Proceso disciplinario</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- R3 -->
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--amber-bg);border:1.5px solid var(--amber-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C07314" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><span class="rule-code">R3</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Marcación con sentido incorrecto</div>
+            <div class="direct-row"><span class="direct-lbl">Acción directa</span><span class="b-arr">→</span><span class="badge bg-tpm">TPM — llamado al desempeño</span></div>
+          </div>
+        </div>
+        <!-- R4 -->
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--amber-bg);border:1.5px solid var(--amber-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C07314" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div><span class="rule-code">R4</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Ausencia prolongada sin justificación</div>
+            <div class="d-row">
+              <div class="diamond dm-purple"><div class="diamond-shape"></div><div class="diamond-text">¿Días consecutivos?</div></div>
+              <div class="branches">
+                <div class="branch"><span class="b-cond">1–2 días</span><span class="b-arr">→</span><span class="badge bg-mon">Continuar monitoreo</span></div>
+                <div class="branch"><span class="b-cond">&gt; 2 días</span><span class="b-arr">→</span><span class="badge bg-wa">📱 WhatsApp automático</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- R5 -->
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--green-bg);border:1.5px solid var(--green-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D9F6E" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><span class="rule-code">R5</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Incapacidad médica</div>
+            <div class="d-chain">
+              <div class="d-row">
+                <div class="diamond dm-purple"><div class="diamond-shape"></div><div class="diamond-text">¿Soporte ≤ 3 días hábiles?</div></div>
+                <div class="branches">
+                  <div class="branch"><span class="b-cond">Sí</span><span class="b-arr">→</span><span class="badge bg-nom">Registrar y enviar a Nómina</span></div>
+                  <div class="branch"><span class="b-cond">No / tardío</span><span class="b-arr">→</span><span class="badge bg-disc">Proceso disciplinario automático</span></div>
+                </div>
+              </div>
+              <div class="trigger-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/></svg>Slack a Notificadora con colaboradores pendientes → activa Módulo 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÓDULO 2 -->
+    <div class="module-card">
+      <div class="module-header" style="background:linear-gradient(135deg,var(--blue-bg),#fff)">
+        <div class="mod-icon" style="background:var(--blue-bg);border:1.5px solid var(--blue-b)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A6DB5" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="mod-title">Módulo 2 — Validación de Horas Adicionales</div><div class="mod-sub">Admin. de Producción · Paso 6 del flujo</div></div>
+        <div class="mod-badge" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-b)">PASO 6</div>
+      </div>
+      <div class="rules-grid">
+        <!-- R6 -->
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--blue-bg);border:1.5px solid var(--blue-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A6DB5" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><span class="rule-code">R6</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Horas adicionales ≤ 12,5 h — Admin. decide</div>
+            <div class="d-row">
+              <div class="diamond dm-purple"><div class="diamond-shape"></div><div class="diamond-text">Decisión Admin.</div></div>
+              <div class="branches">
+                <div class="branch"><span class="b-cond">✅ Todas</span><span class="b-arr">→</span><span class="badge bg-nom">Horas íntegras a Snowflake</span></div>
+                <div class="branch"><span class="b-cond">✂️ Parcial</span><span class="b-arr">→</span><span class="badge bg-ret">Aprobadas · resto descartado</span></div>
+                <div class="branch"><span class="b-cond">❌ Rechazar</span><span class="b-arr">→</span><span class="badge bg-mon">Sin registro en tabla</span></div>
+                <div class="branch"><span class="b-cond">🔁 Corrección</span><span class="b-arr">→</span><span class="badge bg-ret">Regresa al módulo</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- R7 -->
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--violet-bg);border:1.5px solid var(--violet-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="rule-code">R7</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Horas adicionales &gt; 12,5 h — Escala al Gerente</div>
+            <div class="d-chain">
+              <div class="direct-row"><span class="direct-lbl">Sistema bloquea al Admin.</span><span class="b-arr">→</span><span class="badge bg-ger">Escala al Gerente</span></div>
+              <div class="d-row" style="margin-top:4px">
+                <div class="diamond dm-purple"><div class="diamond-shape"></div><div class="diamond-text">Gerente decide</div></div>
+                <div class="branches">
+                  <div class="branch"><span class="b-cond">✅ Aprueba</span><span class="b-arr">→</span><span class="badge bg-nom">Horas a Snowflake</span></div>
+                  <div class="branch"><span class="b-cond">✂️ Parcial</span><span class="b-arr">→</span><span class="badge bg-ret">Aprobadas · resto descartado</span></div>
+                  <div class="branch"><span class="b-cond">❌ Rechaza</span><span class="b-arr">→</span><span class="badge bg-mon">Sin registro</span></div>
+                  <div class="branch"><span class="b-cond">🔁 Corrección</span><span class="b-arr">→</span><span class="badge bg-ret">Regresa al módulo</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÓDULO 3 -->
+    <div class="module-card">
+      <div class="module-header" style="background:linear-gradient(135deg,var(--teal-bg),#fff)">
+        <div class="mod-icon" style="background:var(--teal-bg);border:1.5px solid var(--teal-b)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A7B65" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div><div class="mod-title">Módulo 3 — Registro de Incapacidades</div><div class="mod-sub">Equipo de Notificación · Activado desde R5</div></div>
+        <div class="mod-badge" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-b)">NOTIFICACIÓN</div>
+      </div>
+      <div class="rules-grid">
+        <div class="rule">
+          <div class="rule-icon-col"><div class="rule-icon" style="background:var(--teal-bg);border:1.5px solid var(--teal-b)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A7B65" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="16 13 12 17 8 13"/><line x1="12" y1="7" x2="12" y2="17"/></svg></div><span class="rule-code">R8</span></div>
+          <div class="rule-body">
+            <div class="rule-title">Legalización de incapacidad por Notificadora</div>
+            <div class="step-chain">
+              <div class="sc-row"><div class="sc-num" style="background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose-b)">1</div><span class="badge bg-notif">Slack llega con colaboradores pendientes</span></div>
+              <div class="v-arr">↓</div>
+              <div class="sc-row"><div class="sc-num" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-b)">2</div><span class="badge bg-ger">Adjunta soporte físico o digital</span></div>
+              <div class="v-arr">↓</div>
+              <div class="sc-row"><div class="sc-num" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-b)">3</div><span class="badge bg-ger">Confirma días exactos en el sistema</span></div>
+              <div class="v-arr">↓</div>
+              <div class="sc-row"><div class="sc-num" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-b)">4</div><span class="badge bg-nom">Incapacidad legalizada → Snowflake → Nómina</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROLES -->
+    <div class="roles-row">
+      <div class="role-pill"><div class="role-dot" style="background:var(--green)"></div>Sistema / Snowflake</div>
+      <div class="role-pill"><div class="role-dot" style="background:var(--purple)"></div>Admin. de Producción</div>
+      <div class="role-pill"><div class="role-dot" style="background:var(--indigo)"></div>Jefe de Producción</div>
+      <div class="role-pill"><div class="role-dot" style="background:var(--teal)"></div>Gerente de Producción</div>
+      <div class="role-pill"><div class="role-dot" style="background:var(--blue)"></div>TPM</div>
+      <div class="role-pill"><div class="role-dot" style="background:var(--rose)"></div>Equipo de Notificación</div>
+      <div class="role-pill"><div class="role-dot" style="background:#27500A"></div>Talento Humano / Nómina</div>
+    </div>
+
+  </div>
+
+  <!-- ══ RIGHT: STATUS ══ -->
+  <div class="status-col">
+
+    <!-- SUMMARY -->
+    <div class="status-summary">
+      <div class="ss-title">Resumen de estado</div>
+      <div class="ss-stat"><span class="ss-stat-lbl">✅ Funcional</span><span class="ss-stat-val sv-live" id="count-live">0</span></div>
+      <div class="ss-stat"><span class="ss-stat-lbl">🔧 En desarrollo</span><span class="ss-stat-val sv-dev" id="count-dev">0</span></div>
+      <div class="ss-stat"><span class="ss-stat-lbl">⏳ Pendiente</span><span class="ss-stat-val sv-pend" id="count-pend">9</span></div>
+    </div>
+
+    <!-- STATUS CARD -->
+    <div class="status-card">
+      <div class="status-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Estado en aplicativo
+      </div>
+      <div class="status-body" id="status-body">
+        <!-- Generado por JS -->
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<script>
+const rules = [
+  { code: 'R0a', name: 'Permiso Remunerado',        status: 'pend' },
+  { code: 'R0b', name: 'Permiso No Remunerado',     status: 'pend' },
+  { code: 'R1',  name: 'Inasistencia IRIS',         status: 'live' },
+  { code: 'R2',  name: 'Llegada tarde',             status: 'live' },
+  { code: 'R3',  name: 'Sentido incorrecto',        status: 'live' },
+  { code: 'R4',  name: 'Ausencia prolongada',       status: 'live' },
+  { code: 'R5',  name: 'Incapacidad médica',        status: 'live' },
+  { code: 'R6',  name: 'Horas adicionales ≤ 12,5h', status: 'dev'  },
+  { code: 'R7',  name: 'Horas adicionales > 12,5h', status: 'dev'  },
+  { code: 'R8',  name: 'Legalización incapacidad',  status: 'pend' },
+];
+
+const labels = { live: '✅ Funcional', dev: '🔧 En desarrollo', pend: '⏳ Pendiente' };
+const pillClass = { live: 'sp-live', dev: 'sp-dev', pend: 'sp-pend' };
+const dotClass  = { live: 'sd-live', dev: 'sd-dev', pend: 'sd-pend' };
+const order = ['live', 'dev', 'pend'];
+
+function updateCounts() {
+  const counts = { live: 0, dev: 0, pend: 0 };
+  rules.forEach(r => counts[r.status]++);
+  document.getElementById('count-live').textContent = counts.live;
+  document.getElementById('count-dev').textContent  = counts.dev;
+  document.getElementById('count-pend').textContent = counts.pend;
+}
+
+function nextStatus(current) {
+  const i = order.indexOf(current);
+  return order[(i + 1) % order.length];
+}
+
+function render() {
+  const body = document.getElementById('status-body');
+  body.innerHTML = '';
+  rules.forEach((rule, idx) => {
+    if (idx > 0) {
+      const div = document.createElement('div');
+      div.className = 'status-divider';
+      body.appendChild(div);
+    }
+    const row = document.createElement('div');
+    row.className = 'status-row';
+    row.innerHTML = `
+      <div class="status-rule-name">
+        <span class="status-rule-code">${rule.code}</span>
+        ${rule.name}
+      </div>
+      <div class="status-pill ${pillClass[rule.status]}" data-idx="${idx}" title="Clic para cambiar estado">
+        <div class="status-dot ${dotClass[rule.status]}"></div>
+        ${labels[rule.status]}
+      </div>`;
+    body.appendChild(row);
+  });
+
+  body.querySelectorAll('.status-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const idx = parseInt(pill.dataset.idx);
+      rules[idx].status = nextStatus(rules[idx].status);
+      render();
+      updateCounts();
+    });
+  });
+  updateCounts();
+}
+
+render();
+</script>
+</body>
+</html>
