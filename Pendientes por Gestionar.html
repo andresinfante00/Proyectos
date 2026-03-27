@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gestión de Novedades</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#F0F1F6;color:#1E1E2E;font-size:13px}
+:root{
+  --p:#5B4FD4;--pl:#EDE9FF;--b:#1A6DB5;--bl:#E3F0FB;
+  --g:#0D9F6E;--gl:#E3F9F2;--a:#C07314;--al:#FFF4E3;
+  --r:#C0392B;--rl:#FDECEA;
+  --bd:#E2E4EF;--mu:#6B7280;--card:#fff;--bg:#F0F1F6;
+}
+.hdr{background:linear-gradient(135deg,#4338CA,#1E1B4B);padding:16px 26px;display:flex;align-items:center;justify-content:space-between}
+.hdr-left{display:flex;flex-direction:column;gap:4px}
+.hdr-title{font-size:17px;font-weight:800;color:#fff}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,.55)}
+.hdr-right{text-align:right}
+.hdr-cut{font-size:14px;font-weight:800;color:#fff;margin-bottom:2px}
+.tabs-bar{background:#fff;border-bottom:2px solid var(--bd);padding:0 26px;display:flex}
+.tab-btn{padding:11px 18px;font-size:12px;font-weight:600;color:var(--mu);border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;display:flex;align-items:center;gap:6px;transition:.12s;white-space:nowrap}
+.tab-btn.active{color:var(--p);border-bottom-color:var(--p)}
+.tab-btn:hover:not(.active){color:#1E1E2E}
+.tpill{border-radius:10px;padding:1px 8px;font-size:10px;font-weight:700}
+.pr{background:var(--rl);color:var(--r)} .pa{background:var(--al);color:var(--a)} .pb{background:var(--bl);color:var(--b)}
+.toolbar{background:#fff;border-bottom:1px solid var(--bd);padding:8px 26px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:48px}
+.tlbl{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.seg{display:flex;background:var(--bg);border-radius:7px;padding:3px;gap:2px;flex-wrap:wrap}
+.sbtn{padding:4px 11px;border-radius:5px;border:none;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--mu);transition:.12s;white-space:nowrap}
+.sbtn.active{background:#fff;color:var(--p);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.srch{padding:5px 10px;border:1px solid var(--bd);border-radius:6px;font-family:inherit;font-size:12px;outline:none;min-width:170px}
+.srch:focus{border-color:var(--p)}
+.flex1{flex:1}
+.rcount{font-size:11px;color:var(--mu)} .rcount strong{color:var(--p);font-weight:700}
+.tc{display:none;flex-direction:column;gap:18px;padding:20px 26px} .tc.active{display:flex}
+.slbl{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;display:flex;align-items:center;gap:8px} .slbl::after{content:'';flex:1;height:1px;background:var(--bd)}
+.rcards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.rcard{background:var(--card);border-radius:12px;border:1px solid var(--bd);overflow:hidden;cursor:pointer;transition:.15s}
+.rcard:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.09)}
+.rcard.sel{outline:2px solid var(--rc);outline-offset:1px}
+.rc-stripe{height:4px}
+.rc-body{padding:12px 15px}
+.rc-ini{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;margin-bottom:8px}
+.rc-name{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;line-height:1.4;margin-bottom:7px}
+.rc-num{font-size:26px;font-weight:800;line-height:1;margin-bottom:2px}
+.rc-sub{font-size:10px;color:var(--mu)}
+.rc-foot{padding:6px 15px;border-top:1px solid var(--bd);display:flex;gap:10px;flex-wrap:wrap}
+.rcf{font-size:10px;font-weight:600} .rcf em{font-weight:500;color:var(--mu);font-style:normal}
+.acc-block{background:var(--card);border-radius:10px;border:1px solid var(--bd);overflow:hidden;border-left:3px solid var(--rc-stripe);margin-bottom:14px}
+.acc-resp-hdr{padding:11px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd)}
+.acc-resp-name{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.acc-resp-kpis{display:flex;gap:16px}
+.akpi{text-align:right} .akpi-val{font-size:18px;font-weight:800;line-height:1} .akpi-lbl{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.4px}
+.planta-row{border-bottom:1px solid var(--bd)} .planta-row:last-child{border-bottom:none}
+.planta-hdr{padding:8px 16px;background:#F8F9FC;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.planta-hdr:hover{background:#EDEEF8}
+.planta-name{font-size:12px;font-weight:700;color:#374151}
+.chips{display:flex;gap:6px;align-items:center}
+.chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.cp{background:var(--rl);color:var(--r)} .cd{background:var(--al);color:var(--a)} .ch{background:var(--bl);color:var(--b)}
+.chev{color:var(--mu);font-size:10px;transition:.15s;margin-left:2px}
+.planta-hdr.open .chev{transform:rotate(90deg)}
+.lineas-wrap{display:none;padding:0 16px 10px 40px} .lineas-wrap.open{display:block}
+.lt{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.lt th{padding:5px 8px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mu);border-bottom:1px solid var(--bd)}
+.lt th.r{text-align:right} .lt td{padding:5px 8px;border-bottom:1px solid #F0F1F6} .lt tr:last-child td{border:none} .lt td.r{text-align:right;font-variant-numeric:tabular-nums} .lt tr:hover td{background:#FAFBFF}
+.db{display:inline-flex;align-items:center;justify-content:center;min-width:28px;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700}
+.d0{background:var(--gl);color:var(--g)} .d1{background:#FFF3E0;color:#E65100} .d2{background:var(--rl);color:var(--r)} .d3{background:#7B0000;color:#fff}
+.ftbl-wrap{background:var(--card);border-radius:10px;border:1px solid var(--bd);overflow:hidden}
+.tsc{max-height:520px;overflow-y:auto}
+.ft{width:100%;border-collapse:collapse;font-size:12px} .ft thead{position:sticky;top:0;z-index:2}
+.ft th{background:#F7F8FC;padding:8px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mu);border-bottom:2px solid var(--bd);white-space:nowrap;cursor:pointer}
+.ft th:hover{background:#EDEFF8;color:var(--p)} .ft th.r{text-align:right}
+.ft td{padding:7px 12px;border-bottom:1px solid #F0F1F6} .ft td.r{text-align:right;font-variant-numeric:tabular-nums}
+.ft tr:hover td{background:#FAFBFF} .ft tfoot td{font-weight:700;background:#F7F8FC;border-top:2px solid var(--bd)}
+.cbdg{display:inline-flex;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:700}
+.cB{background:var(--bl);color:var(--b)} .cS{background:var(--pl);color:var(--p)} .cT{background:var(--gl);color:var(--g)}
+.panel{background:var(--card);border-radius:10px;border:1px solid var(--bd);overflow:hidden}
+.ph{padding:13px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.pt{font-size:13px;font-weight:700}
+.pbody{padding:18px}
+.chart-box{position:relative}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.an-seg{display:flex;background:var(--bg);border-radius:7px;padding:3px;gap:2px;flex-wrap:wrap}
+::-webkit-scrollbar{width:4px;height:4px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:#C4C7D4;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-title">Gestión de Novedades</span>
+    <span class="hdr-sub">Período: 18 Feb – 26 Mar 2026</span>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-cut">Corte: 27/03/2026</div>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('in',this)">Inasistencias <span class="tpill pr" id="pill-in"></span></button>
+  <button class="tab-btn" onclick="switchTab('ha',this)">Horas Adicionales <span class="tpill pa" id="pill-ha"></span></button>
+  <button class="tab-btn" onclick="switchTab('an',this)">Análisis <span class="tpill pb">↗</span></button>
+</div>
+
+<div class="toolbar" id="tb">
+  <span class="tlbl">Vista:</span>
+  <div class="seg"><button class="sbtn active" id="vt" onclick="setView('tree')">Por Planta</button><button class="sbtn" id="vf" onclick="setView('flat')">Tabla</button></div>
+  <span class="tlbl">Responsable:</span>
+  <div class="seg" id="rseg"></div>
+  <input class="srch" id="srch" placeholder="Buscar planta o línea…" oninput="applyF()">
+  <div class="flex1"></div>
+  <span class="rcount" id="rc"></span>
+</div>
+
+<div class="tc active" id="tc-in">
+  <div><div class="slbl">Por Responsable</div><div class="rcards" id="in-rcards"></div></div>
+  <div id="in-tree"></div>
+  <div id="in-flat" style="display:none"><div class="ftbl-wrap"><div class="tsc"><table class="ft"><thead><tr id="in-th"></tr></thead><tbody id="in-tb"></tbody><tfoot><tr id="in-tf"></tr></tfoot></table></div></div></div>
+</div>
+
+<div class="tc" id="tc-ha">
+  <div><div class="slbl">Por Responsable</div><div class="rcards" id="ha-rcards"></div></div>
+  <div id="ha-tree"></div>
+  <div id="ha-flat" style="display:none"><div class="ftbl-wrap"><div class="tsc"><table class="ft"><thead><tr id="ha-th"></tr></thead><tbody id="ha-tb"></tbody><tfoot><tr id="ha-tf"></tr></tfoot></table></div></div></div>
+</div>
+
+<div class="tc" id="tc-an">
+  <div class="panel">
+    <div class="ph"><span class="pt">Top Causas de Inasistencia por Responsable</span></div>
+    <div class="pbody"><div class="chart-box" style="height:320px"><canvas id="c-causas"></canvas></div></div>
+  </div>
+  <div class="two-col">
+    <div class="panel">
+      <div class="ph"><span class="pt">Horas Programadas · Reales · Aprobadas</span></div>
+      <div class="pbody"><div class="chart-box" style="height:280px"><canvas id="c-hrs"></canvas></div></div>
+    </div>
+    <div class="panel">
+      <div class="ph">
+        <span class="pt">Horas Extra vs Aprobadas — Semana a Semana</span>
+        <div class="an-seg" id="hw-seg"></div>
+      </div>
+      <div class="pbody"><div class="chart-box" style="height:280px"><canvas id="c-hw"></canvas></div></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ph">
+      <span class="pt">Evolución Semanal — Pendientes sin Gestionar</span>
+      <div class="an-seg" id="pw-seg">
+        <button class="sbtn active" onclick="switchPW('in',this)">Inasistencias</button>
+        <button class="sbtn" onclick="switchPW('ha',this)">Horas Adicionales</button>
+      </div>
+    </div>
+    <div class="pbody"><div class="chart-box" style="height:260px"><canvas id="c-pw"></canvas></div></div>
+  </div>
+</div>
+
+<script>
+const D  = {"responsables": ["ADRIANA FAJARDO", "ELIZABETH MEJIA", "FEDERICO DÍAZ", "GABRIEL VIVAS", "HUGO GARCIA", "JUAN DAVID ALZATE", "JUAN DIEGO MARTINEZ", "JUAN SANTIAGO"], "semanas": [8, 9, 10, 11, 12, 13], "sem_labels": {"8": "S8 (18/02)", "9": "S9 (23/02)", "10": "S10 (02/03)", "11": "S11 (09/03)", "12": "S12 (16/03)", "13": "S13 (23/03)"}, "in_total": 1144, "ha_total": 297, "in_resp_cards": [{"RESPONSABLE": "JUAN SANTIAGO", "TOTAL": 245, "MAX_DIAS": 11, "PLANTAS": 4, "HRS_PEND": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "TOTAL": 215, "MAX_DIAS": 10, "PLANTAS": 3, "HRS_PEND": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "TOTAL": 179, "MAX_DIAS": 11, "PLANTAS": 3, "HRS_PEND": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "TOTAL": 162, "MAX_DIAS": 16, "PLANTAS": 3, "HRS_PEND": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "TOTAL": 94, "MAX_DIAS": 3, "PLANTAS": 2, "HRS_PEND": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "TOTAL": 93, "MAX_DIAS": 3, "PLANTAS": 2, "HRS_PEND": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "TOTAL": 93, "MAX_DIAS": 1, "PLANTAS": 1, "HRS_PEND": 0.0}, {"RESPONSABLE": "ADRIANA FAJARDO", "TOTAL": 63, "MAX_DIAS": 11, "PLANTAS": 1, "HRS_PEND": 0.0}], "ha_resp_cards": [{"RESPONSABLE": "HUGO GARCIA", "TOTAL": 78, "MAX_DIAS": 36, "PLANTAS": 1, "HRS_PEND": 284.7}, {"RESPONSABLE": "GABRIEL VIVAS", "TOTAL": 73, "MAX_DIAS": 10, "PLANTAS": 3, "HRS_PEND": 142.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "TOTAL": 59, "MAX_DIAS": 8, "PLANTAS": 3, "HRS_PEND": 139.7}, {"RESPONSABLE": "ELIZABETH MEJIA", "TOTAL": 44, "MAX_DIAS": 3, "PLANTAS": 1, "HRS_PEND": 61.4}, {"RESPONSABLE": "FEDERICO DÍAZ", "TOTAL": 24, "MAX_DIAS": 7, "PLANTAS": 3, "HRS_PEND": 42.3}, {"RESPONSABLE": "JUAN SANTIAGO", "TOTAL": 14, "MAX_DIAS": 8, "PLANTAS": 4, "HRS_PEND": 34.0}, {"RESPONSABLE": "ADRIANA FAJARDO", "TOTAL": 3, "MAX_DIAS": 2, "PLANTAS": 1, "HRS_PEND": 9.2}, {"RESPONSABLE": "JUAN DAVID ALZATE", "TOTAL": 2, "MAX_DIAS": 3, "PLANTAS": 1, "HRS_PEND": 5.8}], "in_pend_table": [{"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "DIITI 2", "CANT": 19, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "UNIPLAST 4", "CANT": 15, "MAX_DIAS": 6, "HRS": 0.0}, {"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "DIITI 1", "CANT": 14, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "UNIPLAST 1", "CANT": 12, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "GRANULACIÃ“N", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 16, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMPAQUE AUTOMÃTICO PLEGADIZAS 1", "CANT": 11, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA FABRY", "LINEA_PROGRAMADA": "UNIPLAST 5", "CANT": 9, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMPAQUE AUTOMÃTICO PLEGADIZAS 1 (POTES)", "CANT": 7, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA BARRAS MASTICABLES 1", "CANT": 6, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 9", "CANT": 6, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA FABRY", "LINEA_PROGRAMADA": "BOMBOS GRAGEADO MANUAL 1 Y 2", "CANT": 6, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 8", "CANT": 5, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA FABRY", "LINEA_PROGRAMADA": "ENVOLTURA DOBLE TWIST 5 Y 6", "CANT": 4, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 10", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 2", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 4", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 7", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "ENVOLTURA MINIGRAGEAS SACHET 1", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA FABRY", "LINEA_PROGRAMADA": "ENVOLTURA PILLOWPACK", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA FABRY", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA FABRY", "LINEA_PROGRAMADA": "RESTRICCIONES", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA FABRY", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA FABRY", "LINEA_PROGRAMADA": "BOMBOS GRAGEADO MANUAL 3", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "EMPAQUE TERMOENCOGIBLE NANOS", "CANT": 20, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "BOMBOS GRAGEADO DURO MANUAL 2", "CANT": 17, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "CENTROS DE AZUCAR", "CANT": 13, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS 6", "CANT": 10, "MAX_DIAS": 16, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS 7", "CANT": 10, "MAX_DIAS": 15, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "EMBOLSADORA DOYPACK", "CANT": 9, "MAX_DIAS": 16, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "GRAG CHOC AUTOMÃTICO 1", "CANT": 9, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "MASMELOS 1", "CANT": 9, "MAX_DIAS": 16, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 8, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "BOMBOS GRAGEADO DURO MANUAL 1", "CANT": 8, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS 4", "CANT": 7, "MAX_DIAS": 14, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "ESTUCHADORA NANOS 40", "CANT": 5, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "ENVOLTURA DOBLE TWIST", "CANT": 4, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "EMPAQUE MANUAL CHOCOPOSTRES", "CANT": 4, "MAX_DIAS": 16, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "EMPAQUE MASMELOS 1", "CANT": 4, "MAX_DIAS": 16, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS 5", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "ESTUCHADORA NANOS 12", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "REFINADO CHOCOLATE 3", "CANT": 3, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "BARRAS DE CEREAL 1", "CANT": 3, "MAX_DIAS": 15, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "EMBOLSADORA CHOCOCLUSTER", "CANT": 3, "MAX_DIAS": 15, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "PERIFERICOS", "CANT": 3, "MAX_DIAS": 16, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "BAÃ‘ADO MASMELOS A", "CANT": 2, "MAX_DIAS": 16, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "BOMBO DRYAM", "CANT": 1, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "CHOCOLATE- CONCHADO", "CANT": 1, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "GRAG CHOC MANUAL", "CANT": 1, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "TOSTADO NUECES", "CANT": 1, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "CHOCOCLUSTER", "CANT": 1, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "BARRAS MASTICABLES 1", "CANT": 37, "MAX_DIAS": 8, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "UNIPLAST 3", "CANT": 20, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "MASTICABLES FRUTALES 1", "CANT": 20, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "ENVOLTURA FLOWPACK MOGUL 4", "CANT": 17, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "MOGUL 4", "CANT": 11, "MAX_DIAS": 7, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "CARAMELOS DUROS 1", "CANT": 11, "MAX_DIAS": 9, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS 2 MOGUL 4", "CANT": 8, "MAX_DIAS": 6, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "BARRAS MASTICABLES 3", "CANT": 8, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "RESTRICCIONES", "CANT": 7, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 7, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "TAMIZADO DE AZUCAR", "CANT": 7, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "TURRONES", "CANT": 5, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "DOSIMETRIA", "CANT": 5, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "BARRAS MASTICABLES 2", "CANT": 4, "MAX_DIAS": 6, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "COMPRIMIDOS", "CANT": 4, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "CHUPETAS 1", "CANT": 4, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "MEZCLADO DE CHICLE", "CANT": 4, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "BARRAS MASTICABLES 2 - LOKIÃ‘O", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "RECUPERACION MPR", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "RECUPERACION RECORTE", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "COBERTURAS", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "COOLMIX", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "FONDANERA 2", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "MOLINO DE POLVOS", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "PLANTA JARABE SUPER", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "REFINADO 1 SUPER", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "EMPAQUE AUTOMÃTICO COMPRIMIDOS", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 1, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "AZUCAR INVERTIDO", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "BASE MASTICABLE 1", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "LECHES", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "MEZCLADOR EN V", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "PULVERIZADO 1", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "TOSTADO DE NUECES", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "MOGUL A", "CANT": 20, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "EMBOLSADO MOGUL A", "CANT": 17, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "EMBOLSADO MOGUL B", "CANT": 14, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "IMAR PALETA FUSION", "CANT": 10, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "MASMELOS A", "CANT": 10, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "PERIFERICOS", "CANT": 9, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "MOGUL B", "CANT": 6, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "PERSONAL DE PETFOOD", "CANT": 4, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "ENVOLTURA 35 G", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 2", "LINEA_PROGRAMADA": "LINEA MANUAL 4", "CANT": 19, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 2", "LINEA_PROGRAMADA": "LINEA MANUAL 5", "CANT": 18, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 5", "LINEA_PROGRAMADA": "LINEA MANUAL 3", "CANT": 17, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 2", "LINEA_PROGRAMADA": "LINEA MANUAL 6", "CANT": 10, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 5", "LINEA_PROGRAMADA": "LINEA MANUAL CHAO", "CANT": 10, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 5", "LINEA_PROGRAMADA": "LINEA MANUAL 2", "CANT": 8, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 5", "LINEA_PROGRAMADA": "LINEA MANUAL PB", "CANT": 7, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 5", "LINEA_PROGRAMADA": "PERIFERICOS", "CANT": 3, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 2", "LINEA_PROGRAMADA": "PERIFERICOS", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "PELADERO DE COCO", "LINEA_PROGRAMADA": "PELADERO DE COCO", "CANT": 27, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "GRAGEADO", "CANT": 18, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "CHAO TUBO", "CANT": 16, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "UNIPLAST C", "CANT": 16, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "EMPAQUE AUTOMÃTICO BARRAS BAÃ‘ADAS", "CANT": 13, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "BARRAS BAÃ‘ADAS A", "CANT": 12, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "CONFITEROS LIDERES", "CANT": 11, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "PMPB", "CANT": 11, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "EMBOLSADORA UNIPLAST C", "CANT": 10, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "PERIFERICOS", "CANT": 9, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "EMPAQUE UNIPLAST A", "CANT": 7, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "UNIPLAST A", "CANT": 7, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "EMBOLSADO GOMAS EXTRUIDAS RC", "CANT": 6, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "PET", "LINEA_PROGRAMADA": "PET", "CANT": 6, "MAX_DIAS": 6, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "LÃNEA SATÃ‰LITE BARRAS BAÃ‘ADAS A", "CANT": 3, "MAX_DIAS": 2, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "GOMAS EXTRUIDAS COCINADORES", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "GRAGEADO UNIPLAST A", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "EMBOLSADO GOMAS EXTRUIDAS", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "EMBOLSADO GOMAS EXTRUIDAS NC", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "GOMAS EXTRUIDAS NC", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "PIRAMIDAL 1", "CANT": 32, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS MOGUL 2", "CANT": 23, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 3", "LINEA_PROGRAMADA": "MOGUL 1", "CANT": 19, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 16, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 3", "LINEA_PROGRAMADA": "BOMBOS GRAGEADO DURO MANUAL 3", "CANT": 16, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 2", "LINEA_PROGRAMADA": "MOGUL 3", "CANT": 15, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "ENVASADORA POTES / MANUAL", "CANT": 14, "MAX_DIAS": 8, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "ENVOLTURA PILLOW PACK", "CANT": 13, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "RESTRICCIONES", "CANT": 11, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "EMBOLSADORA GOMAS 1 MOGUL 1", "CANT": 10, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 2", "LINEA_PROGRAMADA": "MOGUL 2", "CANT": 10, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "EMPAQUE SNACKS BARRAS BAÃ‘ADAS", "CANT": 9, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "LAVADO DE CANASTAS", "CANT": 9, "MAX_DIAS": 3, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS MOGUL 1", "CANT": 8, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 2", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 8, "MAX_DIAS": 11, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 7, "MAX_DIAS": 10, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "RESTRICCIONES", "CANT": 7, "MAX_DIAS": 6, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS 3", "CANT": 5, "MAX_DIAS": 6, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS MOGUL 3", "CANT": 4, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 2", "LINEA_PROGRAMADA": "RESTRICCIONES", "CANT": 3, "MAX_DIAS": 7, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "ENVOLTURA PIRAMIDAL 2", "CANT": 2, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 3", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 3", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 1, "MAX_DIAS": 1, "HRS": 0.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 3", "LINEA_PROGRAMADA": "REFINADO CHOCOLATE 2", "CANT": 1, "MAX_DIAS": 10, "HRS": 0.0}], "ha_pend_table": [{"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "DIITI 1", "CANT": 1, "MAX_DIAS": 2, "HRS": 4.3}, {"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 1, "MAX_DIAS": 2, "HRS": 0.6}, {"RESPONSABLE": "ADRIANA FAJARDO", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 3", "LINEA_PROGRAMADA": "UNIPLAST 4", "CANT": 1, "MAX_DIAS": 2, "HRS": 4.2}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 16, "MAX_DIAS": 3, "HRS": 22.6}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 8", "CANT": 6, "MAX_DIAS": 3, "HRS": 7.6}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 2", "CANT": 5, "MAX_DIAS": 3, "HRS": 6.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 4", "CANT": 4, "MAX_DIAS": 3, "HRS": 7.5}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 9", "CANT": 4, "MAX_DIAS": 3, "HRS": 5.8}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 7", "CANT": 3, "MAX_DIAS": 3, "HRS": 4.0}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "EMBOLSADORA CARAMELOS 10", "CANT": 2, "MAX_DIAS": 3, "HRS": 2.8}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "ENVOLTURA MINIGRAGEAS SACHET 1", "CANT": 2, "MAX_DIAS": 3, "HRS": 2.8}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 1, "MAX_DIAS": 3, "HRS": 1.1}, {"RESPONSABLE": "ELIZABETH MEJIA", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "EMBOLSADO", "LINEA_PROGRAMADA": "RESTRICCIONES", "CANT": 1, "MAX_DIAS": 3, "HRS": 1.3}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "EMPAQUE TERMOENCOGIBLE NANOS", "CANT": 6, "MAX_DIAS": 7, "HRS": 24.1}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 4, "MAX_DIAS": 7, "HRS": 2.2}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 4, "MAX_DIAS": 7, "HRS": 2.8}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 1", "LINEA_PROGRAMADA": "ESTUCHADORA NANOS 40", "CANT": 3, "MAX_DIAS": 4, "HRS": 1.7}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "BOMBO DRYAM", "CANT": 2, "MAX_DIAS": 3, "HRS": 8.3}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "PERIFERICOS", "CANT": 2, "MAX_DIAS": 7, "HRS": 1.3}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "CENTROS DE AZUCAR", "CANT": 1, "MAX_DIAS": 2, "HRS": 0.5}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 1", "LINEA_PROGRAMADA": "REFINADO CHOCOLATE 3", "CANT": 1, "MAX_DIAS": 3, "HRS": 0.7}, {"RESPONSABLE": "FEDERICO DÍAZ", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU ST", "LINEA_PROGRAMADA": "EMPAQUE MANUAL CHOCOPOSTRES", "CANT": 1, "MAX_DIAS": 3, "HRS": 0.5}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "CARAMELOS DUROS 1", "CANT": 21, "MAX_DIAS": 10, "HRS": 27.1}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "BARRAS MASTICABLES 1", "CANT": 11, "MAX_DIAS": 9, "HRS": 21.2}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "BARRAS MASTICABLES 3", "CANT": 9, "MAX_DIAS": 10, "HRS": 17.6}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "CHUPETAS 1", "CANT": 9, "MAX_DIAS": 10, "HRS": 18.5}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 4, "MAX_DIAS": 9, "HRS": 16.3}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "LIMPIEZA BANDEJAS", "CANT": 4, "MAX_DIAS": 7, "HRS": 15.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "UNIPLAST 3", "CANT": 4, "MAX_DIAS": 8, "HRS": 5.8}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "CHICLE CUBO", "CANT": 3, "MAX_DIAS": 8, "HRS": 6.7}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "ENVOLTURA FLOWPACK MOGUL 4", "CANT": 2, "MAX_DIAS": 9, "HRS": 8.1}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "MOGUL 4", "CANT": 2, "MAX_DIAS": 6, "HRS": 1.0}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "CHICLE EN POLVO", "CANT": 1, "MAX_DIAS": 8, "HRS": 1.7}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 1", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 1, "MAX_DIAS": 3, "HRS": 1.1}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA 2", "LINEA_PROGRAMADA": "RESTRICCIONES", "CANT": 1, "MAX_DIAS": 8, "HRS": 1.4}, {"RESPONSABLE": "GABRIEL VIVAS", "CENTRO_PROGRAMADO": "SUPER", "PLANTA_PROGRAMADA": "PLANTA PMPS", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 1, "MAX_DIAS": 2, "HRS": 0.6}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "IMAR PALETA FUSION", "CANT": 36, "MAX_DIAS": 36, "HRS": 149.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "MOGUL B", "CANT": 19, "MAX_DIAS": 24, "HRS": 70.6}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "PERIFERICOS", "CANT": 10, "MAX_DIAS": 35, "HRS": 41.2}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "MOGUL A", "CANT": 5, "MAX_DIAS": 27, "HRS": 5.2}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "RESTRICCIONES", "CANT": 3, "MAX_DIAS": 28, "HRS": 8.8}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "MASMELOS A", "CANT": 2, "MAX_DIAS": 32, "HRS": 1.1}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 1, "MAX_DIAS": 35, "HRS": 4.0}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "EMBOLSADO MOGUL A", "CANT": 1, "MAX_DIAS": 24, "HRS": 0.5}, {"RESPONSABLE": "HUGO GARCIA", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 3", "LINEA_PROGRAMADA": "PERSONAL DE PETFOOD", "CANT": 1, "MAX_DIAS": 14, "HRS": 4.2}, {"RESPONSABLE": "JUAN DAVID ALZATE", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 5", "LINEA_PROGRAMADA": "ADICIONALES", "CANT": 2, "MAX_DIAS": 3, "HRS": 5.8}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "PELADERO DE COCO", "LINEA_PROGRAMADA": "PELADERO DE COCO", "CANT": 41, "MAX_DIAS": 8, "HRS": 109.7}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "CONFITEROS LIDERES", "CANT": 6, "MAX_DIAS": 3, "HRS": 9.3}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "UNIPLAST C", "CANT": 4, "MAX_DIAS": 2, "HRS": 6.3}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "EMBOLSADORA UNIPLAST C", "CANT": 2, "MAX_DIAS": 2, "HRS": 3.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "GRAGEADO", "CANT": 2, "MAX_DIAS": 2, "HRS": 1.7}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "CHAO TUBO", "CANT": 1, "MAX_DIAS": 2, "HRS": 1.0}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "EMPAQUE AUTOMÃTICO BARRAS BAÃ‘ADAS", "CANT": 1, "MAX_DIAS": 3, "HRS": 3.9}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "BIANCHI 1", "LINEA_PROGRAMADA": "UNIPLAST A", "CANT": 1, "MAX_DIAS": 3, "HRS": 0.6}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "CENTRO_PROGRAMADO": "BIANCHI", "PLANTA_PROGRAMADA": "PET", "LINEA_PROGRAMADA": "PET", "CANT": 1, "MAX_DIAS": 8, "HRS": 4.3}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 3, "MAX_DIAS": 4, "HRS": 12.6}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS 3", "CANT": 2, "MAX_DIAS": 7, "HRS": 8.0}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 2, "MAX_DIAS": 7, "HRS": 1.1}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 2", "LINEA_PROGRAMADA": "PERIFÃ‰RICOS", "CANT": 2, "MAX_DIAS": 4, "HRS": 1.9}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 2", "LINEA_PROGRAMADA": "EMBOLSADORA SNACKS MOGUL 3", "CANT": 1, "MAX_DIAS": 6, "HRS": 0.5}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "EMBOLSADORA GOMAS 1 MOGUL 1", "CANT": 1, "MAX_DIAS": 2, "HRS": 0.6}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "EMBOLSADO TRULULU 3", "LINEA_PROGRAMADA": "ENVOLTURA PIRAMIDAL 2", "CANT": 1, "MAX_DIAS": 8, "HRS": 4.8}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 3", "LINEA_PROGRAMADA": "MOGUL 1", "CANT": 1, "MAX_DIAS": 2, "HRS": 0.5}, {"RESPONSABLE": "JUAN SANTIAGO", "CENTRO_PROGRAMADO": "TRULULU", "PLANTA_PROGRAMADA": "TRULULU 3", "LINEA_PROGRAMADA": "REFINADO CHOCOLATE 2", "CANT": 1, "MAX_DIAS": 7, "HRS": 4.0}], "top_causas": ["Causa desconocida", "Mal programado", "Reprogramado", "Incapacidad", "Problemas de lector iris", "LlegÃ³ tarde", "Permiso", "Vacaciones"], "causas_resp": {"ADRIANA FAJARDO": {"Causa desconocida": 91, "Mal programado": 28, "Reprogramado": 68, "Incapacidad": 74, "Problemas de lector iris": 50, "LlegÃ³ tarde": 23, "Permiso": 26, "Vacaciones": 7}, "ELIZABETH MEJIA": {"Causa desconocida": 105, "Mal programado": 249, "Reprogramado": 168, "Incapacidad": 205, "Problemas de lector iris": 293, "LlegÃ³ tarde": 53, "Permiso": 98, "Vacaciones": 58}, "FEDERICO DÍAZ": {"Causa desconocida": 1058, "Mal programado": 171, "Reprogramado": 142, "Incapacidad": 24, "Problemas de lector iris": 83, "LlegÃ³ tarde": 8, "Permiso": 34, "Vacaciones": 0}, "GABRIEL VIVAS": {"Causa desconocida": 187, "Mal programado": 443, "Reprogramado": 464, "Incapacidad": 115, "Problemas de lector iris": 105, "LlegÃ³ tarde": 98, "Permiso": 45, "Vacaciones": 8}, "HUGO GARCIA": {"Causa desconocida": 234, "Mal programado": 1189, "Reprogramado": 324, "Incapacidad": 20, "Problemas de lector iris": 15, "LlegÃ³ tarde": 49, "Permiso": 8, "Vacaciones": 13}, "JUAN DAVID ALZATE": {"Causa desconocida": 685, "Mal programado": 135, "Reprogramado": 101, "Incapacidad": 218, "Problemas de lector iris": 43, "LlegÃ³ tarde": 78, "Permiso": 48, "Vacaciones": 15}, "JUAN DIEGO MARTINEZ": {"Causa desconocida": 232, "Mal programado": 80, "Reprogramado": 301, "Incapacidad": 86, "Problemas de lector iris": 16, "LlegÃ³ tarde": 24, "Permiso": 24, "Vacaciones": 26}, "JUAN SANTIAGO": {"Causa desconocida": 158, "Mal programado": 168, "Reprogramado": 500, "Incapacidad": 117, "Problemas de lector iris": 93, "LlegÃ³ tarde": 43, "Permiso": 14, "Vacaciones": 15}}, "hrs_resp": [{"RESPONSABLE": "ADRIANA FAJARDO", "HRS_PROG": 2060, "HRS_REAL": 2809.0, "HRS_APRO": 2769.8}, {"RESPONSABLE": "ELIZABETH MEJIA", "HRS_PROG": 3600, "HRS_REAL": 4469.0, "HRS_APRO": 3925.0}, {"RESPONSABLE": "FEDERICO DÍAZ", "HRS_PROG": 2288, "HRS_REAL": 2776.3, "HRS_APRO": 2438.4}, {"RESPONSABLE": "GABRIEL VIVAS", "HRS_PROG": 4712, "HRS_REAL": 6188.3, "HRS_APRO": 5273.9}, {"RESPONSABLE": "HUGO GARCIA", "HRS_PROG": 748, "HRS_REAL": 1061.8, "HRS_APRO": 119.3}, {"RESPONSABLE": "JUAN DAVID ALZATE", "HRS_PROG": 1016, "HRS_REAL": 1496.5, "HRS_APRO": 1469.6}, {"RESPONSABLE": "JUAN DIEGO MARTINEZ", "HRS_PROG": 4008, "HRS_REAL": 5282.8, "HRS_APRO": 4659.4}, {"RESPONSABLE": "JUAN SANTIAGO", "HRS_PROG": 1408, "HRS_REAL": 1772.9, "HRS_APRO": 1578.9}], "hrs_week": [{"SEMANA": 8, "RESPONSABLE": "ADRIANA FAJARDO", "HRS_EXTRA": 215.8, "HRS_APRO": 799.6}, {"SEMANA": 8, "RESPONSABLE": "ELIZABETH MEJIA", "HRS_EXTRA": 70.61, "HRS_APRO": 372.0}, {"SEMANA": 8, "RESPONSABLE": "FEDERICO DÍAZ", "HRS_EXTRA": 72.72, "HRS_APRO": 381.2}, {"SEMANA": 8, "RESPONSABLE": "GABRIEL VIVAS", "HRS_EXTRA": 279.11, "HRS_APRO": 1048.2}, {"SEMANA": 8, "RESPONSABLE": "HUGO GARCIA", "HRS_EXTRA": 52.64, "HRS_APRO": 119.3}, {"SEMANA": 8, "RESPONSABLE": "JUAN DAVID ALZATE", "HRS_EXTRA": 326.52, "HRS_APRO": 990.5}, {"SEMANA": 8, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "HRS_EXTRA": 118.52, "HRS_APRO": 418.5}, {"SEMANA": 8, "RESPONSABLE": "JUAN SANTIAGO", "HRS_EXTRA": 30.6, "HRS_APRO": 188.0}, {"SEMANA": 9, "RESPONSABLE": "ADRIANA FAJARDO", "HRS_EXTRA": 151.5, "HRS_APRO": 547.5}, {"SEMANA": 9, "RESPONSABLE": "ELIZABETH MEJIA", "HRS_EXTRA": 123.56, "HRS_APRO": 453.1}, {"SEMANA": 9, "RESPONSABLE": "FEDERICO DÍAZ", "HRS_EXTRA": 59.76, "HRS_APRO": 333.1}, {"SEMANA": 9, "RESPONSABLE": "GABRIEL VIVAS", "HRS_EXTRA": 227.3, "HRS_APRO": 964.2}, {"SEMANA": 9, "RESPONSABLE": "HUGO GARCIA", "HRS_EXTRA": 14.26, "HRS_APRO": 0.0}, {"SEMANA": 9, "RESPONSABLE": "JUAN DAVID ALZATE", "HRS_EXTRA": 43.15, "HRS_APRO": 143.2}, {"SEMANA": 9, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "HRS_EXTRA": 105.56, "HRS_APRO": 357.7}, {"SEMANA": 9, "RESPONSABLE": "JUAN SANTIAGO", "HRS_EXTRA": 39.27, "HRS_APRO": 255.3}, {"SEMANA": 10, "RESPONSABLE": "ADRIANA FAJARDO", "HRS_EXTRA": 143.45, "HRS_APRO": 506.9}, {"SEMANA": 10, "RESPONSABLE": "ELIZABETH MEJIA", "HRS_EXTRA": 372.81, "HRS_APRO": 1657.4}, {"SEMANA": 10, "RESPONSABLE": "FEDERICO DÍAZ", "HRS_EXTRA": 155.76, "HRS_APRO": 1092.6}, {"SEMANA": 10, "RESPONSABLE": "GABRIEL VIVAS", "HRS_EXTRA": 441.12, "HRS_APRO": 1781.0}, {"SEMANA": 10, "RESPONSABLE": "HUGO GARCIA", "HRS_EXTRA": 87.28, "HRS_APRO": 0.0}, {"SEMANA": 10, "RESPONSABLE": "JUAN DAVID ALZATE", "HRS_EXTRA": 16.03, "HRS_APRO": 63.8}, {"SEMANA": 10, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "HRS_EXTRA": 256.29, "HRS_APRO": 1224.6}, {"SEMANA": 10, "RESPONSABLE": "JUAN SANTIAGO", "HRS_EXTRA": 179.31, "HRS_APRO": 712.2}, {"SEMANA": 11, "RESPONSABLE": "ADRIANA FAJARDO", "HRS_EXTRA": 144.14, "HRS_APRO": 516.1}, {"SEMANA": 11, "RESPONSABLE": "ELIZABETH MEJIA", "HRS_EXTRA": 126.97, "HRS_APRO": 791.8}, {"SEMANA": 11, "RESPONSABLE": "FEDERICO DÍAZ", "HRS_EXTRA": 122.81, "HRS_APRO": 486.2}, {"SEMANA": 11, "RESPONSABLE": "GABRIEL VIVAS", "HRS_EXTRA": 328.24, "HRS_APRO": 1252.2}, {"SEMANA": 11, "RESPONSABLE": "HUGO GARCIA", "HRS_EXTRA": 104.81, "HRS_APRO": 0.0}, {"SEMANA": 11, "RESPONSABLE": "JUAN DAVID ALZATE", "HRS_EXTRA": 63.54, "HRS_APRO": 199.5}, {"SEMANA": 11, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "HRS_EXTRA": 326.24, "HRS_APRO": 1454.6}, {"SEMANA": 11, "RESPONSABLE": "JUAN SANTIAGO", "HRS_EXTRA": 76.1, "HRS_APRO": 398.5}, {"SEMANA": 12, "RESPONSABLE": "ADRIANA FAJARDO", "HRS_EXTRA": 54.89, "HRS_APRO": 289.7}, {"SEMANA": 12, "RESPONSABLE": "ELIZABETH MEJIA", "HRS_EXTRA": 109.26, "HRS_APRO": 640.4}, {"SEMANA": 12, "RESPONSABLE": "FEDERICO DÍAZ", "HRS_EXTRA": 59.65, "HRS_APRO": 145.3}, {"SEMANA": 12, "RESPONSABLE": "GABRIEL VIVAS", "HRS_EXTRA": 170.22, "HRS_APRO": 179.5}, {"SEMANA": 12, "RESPONSABLE": "HUGO GARCIA", "HRS_EXTRA": 44.05, "HRS_APRO": 0.0}, {"SEMANA": 12, "RESPONSABLE": "JUAN DAVID ALZATE", "HRS_EXTRA": 25.5, "HRS_APRO": 72.5}, {"SEMANA": 12, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "HRS_EXTRA": 375.79, "HRS_APRO": 1149.4}, {"SEMANA": 12, "RESPONSABLE": "JUAN SANTIAGO", "HRS_EXTRA": 23.42, "HRS_APRO": 24.9}, {"SEMANA": 13, "RESPONSABLE": "ADRIANA FAJARDO", "HRS_EXTRA": 39.21, "HRS_APRO": 110.0}, {"SEMANA": 13, "RESPONSABLE": "ELIZABETH MEJIA", "HRS_EXTRA": 63.63, "HRS_APRO": 10.2}, {"SEMANA": 13, "RESPONSABLE": "FEDERICO DÍAZ", "HRS_EXTRA": 14.74, "HRS_APRO": 0.0}, {"SEMANA": 13, "RESPONSABLE": "GABRIEL VIVAS", "HRS_EXTRA": 24.25, "HRS_APRO": 48.8}, {"SEMANA": 13, "RESPONSABLE": "HUGO GARCIA", "HRS_EXTRA": 10.71, "HRS_APRO": 0.0}, {"SEMANA": 13, "RESPONSABLE": "JUAN DAVID ALZATE", "HRS_EXTRA": 5.78, "HRS_APRO": 0.0}, {"SEMANA": 13, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "HRS_EXTRA": 91.86, "HRS_APRO": 54.5}, {"SEMANA": 13, "RESPONSABLE": "JUAN SANTIAGO", "HRS_EXTRA": 16.13, "HRS_APRO": 0.0}], "pend_week_in": [{"SEMANA": 11, "RESPONSABLE": "FEDERICO DÍAZ", "CANT": 25}, {"SEMANA": 12, "RESPONSABLE": "ADRIANA FAJARDO", "CANT": 3}, {"SEMANA": 12, "RESPONSABLE": "FEDERICO DÍAZ", "CANT": 53}, {"SEMANA": 12, "RESPONSABLE": "GABRIEL VIVAS", "CANT": 23}, {"SEMANA": 12, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "CANT": 21}, {"SEMANA": 12, "RESPONSABLE": "JUAN SANTIAGO", "CANT": 73}, {"SEMANA": 13, "RESPONSABLE": "ADRIANA FAJARDO", "CANT": 60}, {"SEMANA": 13, "RESPONSABLE": "ELIZABETH MEJIA", "CANT": 94}, {"SEMANA": 13, "RESPONSABLE": "FEDERICO DÍAZ", "CANT": 84}, {"SEMANA": 13, "RESPONSABLE": "GABRIEL VIVAS", "CANT": 192}, {"SEMANA": 13, "RESPONSABLE": "HUGO GARCIA", "CANT": 93}, {"SEMANA": 13, "RESPONSABLE": "JUAN DAVID ALZATE", "CANT": 93}, {"SEMANA": 13, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "CANT": 158}, {"SEMANA": 13, "RESPONSABLE": "JUAN SANTIAGO", "CANT": 172}], "pend_week_ha": [{"SEMANA": 8, "RESPONSABLE": "HUGO GARCIA", "CANT": 6}, {"SEMANA": 9, "RESPONSABLE": "HUGO GARCIA", "CANT": 6}, {"SEMANA": 10, "RESPONSABLE": "HUGO GARCIA", "CANT": 24}, {"SEMANA": 11, "RESPONSABLE": "HUGO GARCIA", "CANT": 27}, {"SEMANA": 12, "RESPONSABLE": "FEDERICO DÍAZ", "CANT": 11}, {"SEMANA": 12, "RESPONSABLE": "GABRIEL VIVAS", "CANT": 62}, {"SEMANA": 12, "RESPONSABLE": "HUGO GARCIA", "CANT": 12}, {"SEMANA": 12, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "CANT": 16}, {"SEMANA": 12, "RESPONSABLE": "JUAN SANTIAGO", "CANT": 6}, {"SEMANA": 13, "RESPONSABLE": "ADRIANA FAJARDO", "CANT": 3}, {"SEMANA": 13, "RESPONSABLE": "ELIZABETH MEJIA", "CANT": 44}, {"SEMANA": 13, "RESPONSABLE": "FEDERICO DÍAZ", "CANT": 13}, {"SEMANA": 13, "RESPONSABLE": "GABRIEL VIVAS", "CANT": 11}, {"SEMANA": 13, "RESPONSABLE": "HUGO GARCIA", "CANT": 3}, {"SEMANA": 13, "RESPONSABLE": "JUAN DAVID ALZATE", "CANT": 2}, {"SEMANA": 13, "RESPONSABLE": "JUAN DIEGO MARTINEZ", "CANT": 43}, {"SEMANA": 13, "RESPONSABLE": "JUAN SANTIAGO", "CANT": 8}]};
+const RC = {"ADRIANA FAJARDO": "#0D9F6E", "ELIZABETH MEJIA": "#1A6DB5", "FEDERICO D\u00cdAZ": "#5B4FD4", "GABRIEL VIVAS": "#C07314", "HUGO GARCIA": "#C0392B", "JUAN DAVID ALZATE": "#0891B2", "JUAN DIEGO MARTINEZ": "#7C3AED", "JUAN SANTIAGO": "#059669"};
+const RL = {"ADRIANA FAJARDO": "#E3F9F2", "ELIZABETH MEJIA": "#E3F0FB", "FEDERICO D\u00cdAZ": "#EDE9FF", "GABRIEL VIVAS": "#FFF4E3", "HUGO GARCIA": "#FDECEA", "JUAN DAVID ALZATE": "#E0F7FA", "JUAN DIEGO MARTINEZ": "#F5F3FF", "JUAN SANTIAGO": "#ECFDF5"};
+const RI = {"ADRIANA FAJARDO": "AF", "ELIZABETH MEJIA": "EM", "FEDERICO D\u00cdAZ": "FD", "GABRIEL VIVAS": "GV", "HUGO GARCIA": "HG", "JUAN DAVID ALZATE": "JA", "JUAN DIEGO MARTINEZ": "JM", "JUAN SANTIAGO": "JS"};
+const CP = ["#5B4FD4", "#1A6DB5", "#0D9F6E", "#C07314", "#C0392B", "#8B5CF6", "#0891B2", "#D97706"];
+
+let TAB='in', VIEW='tree', RESP='', SEARCH='';
+let FS={col:3,asc:false};
+let HW_RESP=D.responsables[0];
+let PW_MODE='in';
+
+const CH={};
+function mkC(id,cfg){if(CH[id])CH[id].destroy();CH[id]=new Chart(document.getElementById(id),cfg);}
+Chart.defaults.font.family="'Plus Jakarta Sans',sans-serif";
+Chart.defaults.font.size=11;Chart.defaults.color='#6B7280';
+
+function db(d){const c=d>=15?'d3':d>=7?'d2':d>=3?'d1':'d0';return`<span class="db ${c}">${d}</span>`;}
+function cb(c){const m={BIANCHI:'B',SUPER:'S',TRULULU:'T'};return`<span class="cbdg c${m[c]||'B'}">${c}</span>`;}
+function fmt(n){return n!=null?Number(n).toLocaleString('es-CO'):'—';}
+
+function switchTab(t,btn){
+  TAB=t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.tc').forEach(c=>c.classList.remove('active'));document.getElementById('tc-'+t).classList.add('active');
+  document.getElementById('tb').style.display=t==='an'?'none':'flex';
+  if(t==='an')buildAnalysis();else render();
+}
+
+function buildSegs(){
+  document.getElementById('rseg').innerHTML=D.responsables.map(r=>
+    `<button class="sbtn${RESP===r?' active':''}" onclick="setR('${r}')" style="${RESP===r?'color:'+RC[r]:''}">${r.split(' ')[0]}</button>`).join('');
+}
+function setR(r){RESP=RESP===r?'':r;buildSegs();render();}
+function applyF(){SEARCH=document.getElementById('srch').value.toLowerCase();render();}
+function setView(v){
+  VIEW=v;
+  document.getElementById('vt').classList.toggle('active',v==='tree');
+  document.getElementById('vf').classList.toggle('active',v==='flat');
+  render();
+}
+
+function rows(isHA){
+  return(isHA?D.ha_pend_table:D.in_pend_table).filter(r=>
+    (!RESP||r.RESPONSABLE===RESP)&&
+    (!SEARCH||r.PLANTA_PROGRAMADA.toLowerCase().includes(SEARCH)||r.LINEA_PROGRAMADA.toLowerCase().includes(SEARCH))
+  );
+}
+
+function renderRCards(isHA){
+  const src=isHA?D.ha_resp_cards:D.in_resp_cards;
+  const el=document.getElementById((isHA?'ha':'in')+'-rcards');
+  el.innerHTML=src.map(r=>{
+    const col=RC[r.RESPONSABLE]||'#5B4FD4',lt=RL[r.RESPONSABLE]||'#EDE9FF',ini=RI[r.RESPONSABLE]||'?';
+    const sel=RESP===r.RESPONSABLE;
+    const hrsRow=isHA?`<div class="rcf" style="color:${col}">${r.HRS_PEND.toFixed(1)} hrs <em>extra pend.</em></div>`:'';
+    return`<div class="rcard${sel?' sel':''}" style="--rc:${col}" onclick="toggleR('${r.RESPONSABLE}')">
+      <div class="rc-stripe" style="background:${col}"></div>
+      <div class="rc-body">
+        <div class="rc-ini" style="background:${col}">${ini}</div>
+        <div class="rc-name">${r.RESPONSABLE}</div>
+        <div class="rc-num" style="color:${col}">${fmt(r.TOTAL)}</div>
+        <div class="rc-sub">pendientes sin gestionar</div>
+      </div>
+      <div class="rc-foot" style="background:${col}18">
+        <div class="rcf" style="color:${col}">${r.MAX_DIAS}d <em>máx. vencidos</em></div>
+        <div class="rcf" style="color:${col}">${r.PLANTAS} <em>plantas</em></div>
+        ${hrsRow}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleR(r){RESP=RESP===r?'':r;buildSegs();render();}
+
+function renderTree(isHA){
+  const data=rows(isHA),el=document.getElementById((isHA?'ha':'in')+'-tree');
+  if(!data.length){el.innerHTML='<div style="text-align:center;padding:28px;color:var(--mu);background:var(--card);border-radius:10px;border:1px solid var(--bd)">Sin registros para los filtros seleccionados</div>';setRC(0);return;}
+  const tree={};
+  data.forEach(r=>{
+    if(!tree[r.RESPONSABLE])tree[r.RESPONSABLE]={tot:0,maxD:0,pl:{}};
+    const R=tree[r.RESPONSABLE];R.tot+=r.CANT;R.maxD=Math.max(R.maxD,r.MAX_DIAS);
+    if(!R.pl[r.PLANTA_PROGRAMADA])R.pl[r.PLANTA_PROGRAMADA]={tot:0,maxD:0,hrs:0,ln:[]};
+    const P=R.pl[r.PLANTA_PROGRAMADA];P.tot+=r.CANT;P.maxD=Math.max(P.maxD,r.MAX_DIAS);P.hrs+=(r.HRS||0);P.ln.push(r);
+  });
+  let total=0;
+  el.innerHTML=Object.keys(tree).map(resp=>{
+    const R=tree[resp],col=RC[resp]||'#5B4FD4',lt=RL[resp]||'#EDE9FF';total+=R.tot;
+    const pls=Object.keys(R.pl).map(p=>{
+      const P=R.pl[p];
+      const hrsC=isHA?`<span class="chip ch">${P.hrs.toFixed(1)} hrs</span>`:'';
+      const thH=isHA?'<th class="r">Hrs Extra</th>':'';
+      const lns=[...P.ln].sort((a,b)=>b.CANT-a.CANT).map(l=>{
+        const hC=isHA?`<td class="r" style="color:var(--a);font-weight:600">${(l.HRS||0).toFixed(1)}</td>`:'';
+        return`<tr><td>${l.LINEA_PROGRAMADA}</td><td class="r"><strong>${l.CANT}</strong></td><td class="r">${db(l.MAX_DIAS)}</td>${hC}</tr>`;
+      }).join('');
+      return`<div class="planta-row">
+        <div class="planta-hdr" onclick="togP(this)">
+          <span class="planta-name">${p}</span>
+          <div class="chips"><span class="chip cp">${P.tot} pend.</span><span class="chip cd">máx. ${P.maxD}d</span>${hrsC}<span class="chev">›</span></div>
+        </div>
+        <div class="lineas-wrap"><table class="lt"><thead><tr><th>Línea</th><th class="r">Pend.</th><th class="r">Máx. Días</th>${thH}</tr></thead><tbody>${lns}</tbody></table></div>
+      </div>`;
+    }).join('');
+    return`<div class="acc-block" style="--rc-stripe:${col};border-left-color:${col}">
+      <div class="acc-resp-hdr" style="background:${lt}28">
+        <span class="acc-resp-name" style="color:${col}">${resp}</span>
+        <div class="acc-resp-kpis">
+          <div class="akpi"><div class="akpi-val" style="color:${col}">${R.tot}</div><div class="akpi-lbl">pendientes</div></div>
+          <div class="akpi"><div class="akpi-val" style="color:var(--a)">${R.maxD}d</div><div class="akpi-lbl">máx. días</div></div>
+        </div>
+      </div>${pls}</div>`;
+  }).join('');
+  setRC(total);
+}
+function togP(h){h.classList.toggle('open');h.nextElementSibling.classList.toggle('open');}
+
+function renderFlat(isHA){
+  const data=rows(isHA),pfx=isHA?'ha':'in';
+  const keys=['RESPONSABLE','CENTRO_PROGRAMADO','PLANTA_PROGRAMADA','LINEA_PROGRAMADA','CANT','MAX_DIAS','HRS'];
+  const hdrs=['Responsable','Centro','Planta','Línea','Pend.','Máx. Días',...(isHA?['Hrs Extra']:[])];
+  document.getElementById(pfx+'-th').innerHTML=hdrs.map((h,i)=>
+    `<th class="${i>=4?'r':''}" onclick="sortF(${i})">${h} ${FS.col===i?(FS.asc?'↑':'↓'):'<span style="opacity:.3">↕</span>'}</th>`).join('');
+  const k=keys[FS.col]||'CANT';
+  const sorted=[...data].sort((a,b)=>{const v=a[k]>b[k]?1:a[k]<b[k]?-1:0;return FS.asc?v:-v;});
+  let tp=0,th=0;
+  document.getElementById(pfx+'-tb').innerHTML=sorted.map(r=>{
+    tp+=r.CANT;th+=(r.HRS||0);
+    const hC=isHA?`<td class="r" style="color:var(--a);font-weight:600">${(r.HRS||0).toFixed(1)}</td>`:'';
+    return`<tr>
+      <td style="color:${RC[r.RESPONSABLE]};font-weight:700;font-size:11px">${r.RESPONSABLE}</td>
+      <td>${cb(r.CENTRO_PROGRAMADO)}</td><td>${r.PLANTA_PROGRAMADA}</td><td>${r.LINEA_PROGRAMADA}</td>
+      <td class="r"><strong>${r.CANT}</strong></td><td class="r">${db(r.MAX_DIAS)}</td>${hC}</tr>`;
+  }).join('');
+  const hF=isHA?`<td class="r">${th.toFixed(1)}</td>`:'';
+  document.getElementById(pfx+'-tf').innerHTML=`<td colspan="4">TOTAL</td><td class="r">${tp}</td><td></td>${hF}`;
+  setRC(tp);
+}
+function sortF(c){if(FS.col===c)FS.asc=!FS.asc;else{FS.col=c;FS.asc=false;}render();}
+
+function render(){
+  renderRCards(false);renderRCards(true);
+  ['in-tree','in-flat','ha-tree','ha-flat'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const mine=id.startsWith(TAB);
+    const isTree=id.endsWith('tree');
+    el.style.display=mine&&((VIEW==='tree'&&isTree)||(VIEW==='flat'&&!isTree))?'block':'none';
+  });
+  if(VIEW==='tree'){renderTree(false);renderTree(true);}
+  else renderFlat(TAB==='ha');
+}
+function setRC(n){document.getElementById('rc').innerHTML=`<strong>${n.toLocaleString('es-CO')}</strong> pend.`;}
+
+function buildAnalysis(){buildCausas();buildHrs();buildHW();buildPW();}
+
+function buildCausas(){
+  const resps=D.responsables;
+  const datasets=D.top_causas.map((causa,i)=>{
+    return{label:causa,data:resps.map(r=>D.causas_resp[r]?D.causas_resp[r][causa]||0:0),
+      backgroundColor:CP[i%CP.length],borderRadius:3,borderSkipped:false,stack:'s'};
+  });
+  mkC('c-causas',{type:'bar',data:{labels:resps,datasets},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{grid:{display:false},ticks:{maxRotation:25,font:{size:10}}},y:{grid:{color:'#F0F1F6'},stacked:true,title:{display:true,text:'Registros'}}}
+  }});
+}
+
+function buildHrs(){
+  mkC('c-hrs',{type:'bar',data:{
+    labels:D.hrs_resp.map(r=>r.RESPONSABLE.split(' ')[0]+' '+r.RESPONSABLE.split(' ').slice(-1)[0]),
+    datasets:[
+      {label:'Programadas',data:D.hrs_resp.map(r=>r.HRS_PROG),backgroundColor:'rgba(91,79,212,.75)',borderRadius:3,borderSkipped:false},
+      {label:'Reales',data:D.hrs_resp.map(r=>r.HRS_REAL),backgroundColor:'rgba(26,109,181,.75)',borderRadius:3,borderSkipped:false},
+      {label:'Aprobadas',data:D.hrs_resp.map(r=>r.HRS_APRO),backgroundColor:'rgba(13,159,110,.75)',borderRadius:3,borderSkipped:false},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12,font:{size:11}}},tooltip:{mode:'index',intersect:false}},
+      scales:{x:{grid:{display:false},ticks:{maxRotation:20,font:{size:10}}},y:{grid:{color:'#F0F1F6'},title:{display:true,text:'Horas'}}}}
+  });
+}
+
+function buildHW(resp){
+  resp=resp||HW_RESP;HW_RESP=resp;
+  const seg=document.getElementById('hw-seg');
+  seg.innerHTML=D.responsables.map(r=>
+    `<button class="sbtn${r===resp?' active':''}" onclick="buildHW('${r}')" style="font-size:10px;padding:3px 8px;${r===resp?'color:'+RC[r]:''}">${r.split(' ')[0]}</button>`).join('');
+  const col=RC[resp]||'#5B4FD4',wks=D.semanas;
+  const rr=D.hrs_week.filter(r=>r.RESPONSABLE===resp);
+  mkC('c-hw',{type:'bar',data:{
+    labels:wks.map(w=>D.sem_labels[w]),
+    datasets:[
+      {type:'bar',label:'Hrs Extra',data:wks.map(w=>{const f=rr.find(r=>r.SEMANA===w);return f?f.HRS_EXTRA:0;}),backgroundColor:col+'BB',borderRadius:4,borderSkipped:false},
+      {type:'line',label:'Aprobadas',data:wks.map(w=>{const f=rr.find(r=>r.SEMANA===w);return f?f.HRS_APRO:0;}),borderColor:'#0D9F6E',backgroundColor:'rgba(13,159,110,.08)',fill:true,borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#0D9F6E',tension:.35}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12,font:{size:11}}},tooltip:{mode:'index',intersect:false}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#F0F1F6'},title:{display:true,text:'Horas'}}}}
+  });
+}
+
+function switchPW(mode,btn){
+  PW_MODE=mode;
+  document.querySelectorAll('#pw-seg .sbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  buildPW();
+}
+function buildPW(){
+  const src=PW_MODE==='in'?D.pend_week_in:D.pend_week_ha,wks=D.semanas;
+  const datasets=D.responsables.map(resp=>{
+    const col=RC[resp]||'#5B4FD4';
+    return{label:resp,data:wks.map(w=>{const f=src.find(r=>r.RESPONSABLE===resp&&r.SEMANA===w);return f?f.CANT:0;}),
+      borderColor:col,backgroundColor:col+'18',fill:true,borderWidth:2.5,pointRadius:5,pointBackgroundColor:col,tension:.35};
+  });
+  mkC('c-pw',{type:'line',data:{labels:wks.map(w=>D.sem_labels[w]),datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12,font:{size:11}}},tooltip:{mode:'index',intersect:false}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:'#F0F1F6'},title:{display:true,text:'Registros pendientes'}}}}
+  });
+}
+
+document.getElementById('pill-in').textContent=D.in_total;
+document.getElementById('pill-ha').textContent=D.ha_total;
+buildSegs();renderRCards(false);renderRCards(true);renderTree(false);
+</script>
+</body>
+</html>
