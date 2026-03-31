@@ -379,7 +379,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="modal-prog"><div class="modal-prog-header"><span class="modal-prog-label">Avance del proyecto</span><span class="modal-prog-pct" id="m-pct">—</span></div><div class="modal-prog-bar"><div class="modal-prog-fill" id="m-prog-fill"></div></div></div>
     <div class="modal-checks"><div class="modal-checks-title">Indicadores de madurez</div><div class="modal-checks-grid" id="m-checks"></div></div>
     <div class="modal-detail"><div class="modal-detail-title">Descripción del proyecto</div><div id="m-detail"></div></div>
-    <div class="modal-footer"><div class="modal-footer-left" id="m-footer-code">—</div><div style="display:flex;gap:10px"><button class="btn-close-modal" onclick="closeModal()">Cerrar</button><a class="btn-ver" id="m-link" href="#">Ver tablero</a></div></div>
+    <div class="modal-footer"><div class="modal-footer-left" id="m-footer-code">—</div><div style="display:flex;gap:10px"><button class="btn-close-modal" onclick="closeModal()">Cerrar</button><a class="btn-ver" id="m-link-app" href="#" target="_blank" style="display:none;background:var(--green)">Acceder a la app <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><a class="btn-ver" id="m-link" href="#">Ver tablero</a></div></div>
   </div>
 </div>
 
@@ -398,7 +398,7 @@ const AVANCE_KEY='pdi_avance_v1';
 const META_KEY='pdi_meta_v1';
 
 const BASE=[
-  {id:'PDI-007',nombre:'Gestión de Novedades',sub:'Flujo gerencial · Talento Humano',desc:'Tablero de novedades pendientes por responsable: justificación de inasistencias y validación de horas adicionales por Centro, Planta y Línea. Incluye análisis de causas y tendencia semanal.',tags:['Talento Humano','Snowflake','Streamlit'],badge:'EN DEV',bbg:'var(--amber-bg)',bc:'var(--amber)',bbd:'var(--amber-b)',ibg:'var(--purple-bg)',ibd:'var(--purple-b)',sdot:'dot-dev',slbl:'En desarrollo',sc:'var(--amber)',link:'flujo_novedades_3col_1.html',llbl:'Ver tablero',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:80,ejecutor:'Andres Infante',req:true,disp:true,oper:true,rep:true},
+  {id:'PDI-007',nombre:'Gestión de Novedades',sub:'Flujo gerencial · Talento Humano',link_app:'https://app.administracionsuper.com/GCIHA_CALIDAD',desc:'Tablero de novedades pendientes por responsable: justificación de inasistencias y validación de horas adicionales por Centro, Planta y Línea. Incluye análisis de causas y tendencia semanal.',tags:['Talento Humano','Snowflake','Streamlit'],badge:'EN DEV',bbg:'var(--amber-bg)',bc:'var(--amber)',bbd:'var(--amber-b)',ibg:'var(--purple-bg)',ibd:'var(--purple-b)',sdot:'dot-dev',slbl:'En desarrollo',sc:'var(--amber)',link:'flujo_novedades_3col_1.html',llbl:'Ver tablero',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:80,ejecutor:'Andres Infante',req:true,disp:true,oper:true,rep:true},
   {id:'PDI-008',nombre:'Notificaciones por Plantilla',sub:'Envío automatizado de comunicaciones',desc:'Sistema de notificaciones basado en plantillas para automatizar comunicaciones a colaboradores según eventos del flujo de producción.',tags:['Por definir'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--teal-bg)',ibd:'var(--teal-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:'pdi_008_notificaciones_plantilla.html',llbl:'Ver proyecto',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:0,ejecutor:'Por definir',req:false,disp:false,oper:false,rep:false},
   {id:'PDI-009',nombre:'Portal de Reportes',sub:'Indicadores y visualización de datos',desc:'Portal centralizado de reportes e indicadores para el área de manufactura.',tags:['Por definir'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--blue-bg)',ibd:'var(--blue-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:0,ejecutor:'Por definir',req:false,disp:false,oper:false,rep:false},
   {id:'PDI-001',nombre:'Solución PNC',sub:'Producto No Conforme',desc:'Solución integral para la gestión del producto no conforme en planta.',tags:['Calidad','Manufactura'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--red-bg)',ibd:'var(--red-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:100,ejecutor:'Sebastian Giraldo',req:true,disp:true,oper:true,rep:true},
@@ -429,7 +429,7 @@ function saveAvance(){const av={};P.forEach(p=>av[p.id]=p.avance);try{localStora
 function saveVis(){try{localStorage.setItem(VIS_KEY,JSON.stringify(visState));}catch(e){}}
 function saveMeta(){try{localStorage.setItem(META_KEY,JSON.stringify(metaState));}catch(e){}}
 function isVisible(id){return visState[id]!==false;}
-function getMeta(id){return metaState[id]||(metaState[id]={prioridad:'',impactos:[],indicadores:[],tareas:[]},metaState[id]);}
+function getMeta(id){return metaState[id]||(metaState[id]={prioridad:'',impactos:[],indicadores:[],tareas:[],link_app:''},metaState[id]);}
 
 /* ── PORTAL ── */
 function renderCards(){
@@ -440,7 +440,7 @@ function renderCards(){
     const qp=p.q?`<span class="cf-q q-${p.q}">${p.q}</span>`:'';
     const m=getMeta(p.id);
     const prioHtml=m.prioridad?` <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;${m.prioridad==='Alta'?'background:var(--red-bg);color:var(--red)':m.prioridad==='Media'?'background:var(--amber-bg);color:var(--amber)':'background:var(--green-bg);color:var(--green)'}">${m.prioridad}</span>`:'';
-    return `<div class="project-card" onclick="openModal(${i})" data-tags="${p.id.toLowerCase()} ${p.nombre.toLowerCase()} ${p.ejecutor.toLowerCase()}"><div class="card-top"><div class="card-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div><div class="card-info"><div class="card-title">${p.nombre}${prioHtml}</div><div class="card-sub">${p.sub}</div></div><div class="card-badge" style="background:${p.bbg};color:${p.bc};border-color:${p.bbd}">${p.badge}</div></div><div class="card-body"><div class="card-desc">${p.desc}</div>${pr}<div class="card-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<span class="tag">${p.id}</span></div></div><div class="card-footer"><div class="cf-status"><div class="status-dot ${p.sdot}"></div><span style="color:${p.sc}">${p.slbl}</span>${qp}</div><span class="cf-link">Ver detalle <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>`;
+    return `<div class="project-card" onclick="openModal(${i})" data-tags="${p.id.toLowerCase()} ${p.nombre.toLowerCase()} ${p.ejecutor.toLowerCase()}"><div class="card-top"><div class="card-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div><div class="card-info"><div class="card-title">${p.nombre}${prioHtml}</div><div class="card-sub">${p.sub}</div></div></div><div class="card-body"><div class="card-desc">${p.desc}</div>${pr}</div><div class="card-footer"><div class="cf-status"><div class="status-dot ${p.sdot}"></div><span style="color:${p.sc}">${p.slbl}</span>${qp}</div><span class="cf-link">Ver detalle <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>`;
   }).join('');
   updateStats();
 }
@@ -582,6 +582,24 @@ function renderEditPanel(){
       </div>
     </div>
 
+    <!-- RECURSOS / ACCESO -->
+    <div class="edit-card">
+      <div class="edit-card-head">
+        <div class="edit-card-title">Recursos y Acceso</div>
+      </div>
+      <div class="edit-card-body">
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Link de acceso a la aplicación</label>
+            <div style="display:flex;gap:10px;align-items:center">
+              <input class="form-input" id="ep-link-app" value="${m.link_app||''}" placeholder="https://...">
+              ${m.link_app?`<a href="${m.link_app}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--purple);color:white;border-radius:9px;padding:10px 16px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0">Abrir app <svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><path d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/><polyline points='15 3 21 3 21 9'/><line x1='10' y1='14' x2='21' y2='3'/></svg></a>`:''}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- BOTÓN GUARDAR -->
     <div style="display:flex;justify-content:flex-end">
       <button class="btn-save-project" id="btn-save-proj" onclick="saveProject()">
@@ -604,6 +622,7 @@ function saveProject(){
   const execEl=document.getElementById('ep-exec');
   if(descEl)p.desc=descEl.value;
   if(execEl)p.ejecutor=execEl.value;
+  const laEl=document.getElementById('ep-link-app');if(laEl)getMeta(p.id).link_app=laEl.value;
   // read current task state from DOM before saving
   document.querySelectorAll('#task-tbody tr').forEach((row,i)=>{if(!m.tareas[i])return;const inps=row.querySelectorAll('.task-inp');const sel=row.querySelector('.task-sel');if(inps[0])m.tareas[i].nombre=inps[0].value;if(inps[1])m.tareas[i].responsable=inps[1].value;if(sel)m.tareas[i].estado=sel.value;});
   saveMeta();
@@ -645,6 +664,10 @@ function openModal(i){
   if(m.indicadores.length)extra+=`<div style="margin-bottom:10px"><div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Indicadores clave</div><div style="display:flex;flex-wrap:wrap;gap:5px">${m.indicadores.map(x=>`<span class="chip">${x}</span>`).join('')}</div></div>`;
   if(m.tareas.length){const tp=taskProgress(m.tareas);extra+=`<div><div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Actividades — ${tp.done}/${tp.t} completadas (${tp.pct}%)</div>${m.tareas.map((t,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)"><span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--ink4);width:22px;flex-shrink:0">${String(i+1).padStart(2,'0')}</span><span style="flex:1;font-size:11.5px;color:var(--ink)">${t.nombre||'Sin nombre'}</span><span style="font-size:10px;color:var(--ink3);margin-right:8px">${t.responsable}</span><span class="${taskStatusClass(t.estado)}">${t.estado}</span></div>`).join('')}</div>`;}
   document.getElementById('m-detail').innerHTML=`<div style="background:var(--bg);border-radius:12px;padding:16px 18px;font-size:12px;color:var(--ink3);line-height:1.7;border:1.5px solid var(--border);margin-bottom:12px">${p.desc||'Sin descripción.'}</div>${extra?`<div style="margin-top:10px">${extra}</div>`:''}`;
+  // resource link from meta
+  const mlink=getMeta(p.id).link_app||p.link_app;
+  const mlinkEl=document.getElementById('m-link-app');
+  if(mlinkEl){if(mlink){mlinkEl.href=mlink;mlinkEl.style.display='inline-flex';}else{mlinkEl.style.display='none';}}
   const lnk=document.getElementById('m-link');
   if(p.link){lnk.href=p.link;lnk.className='btn-ver';lnk.innerHTML=`${p.llbl||'Ver tablero'} <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;}
   else{lnk.href='#';lnk.className='btn-ver disabled';lnk.textContent='Sin archivo a\u00fan';}
