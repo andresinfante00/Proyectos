@@ -701,7 +701,7 @@ function openModal(i){
   const mlink=getMeta(p.id).link_app||p.link_app;
   const mlinkEl=document.getElementById('m-link-app');
   if(mlinkEl){if(mlink){mlinkEl.href=mlink;mlinkEl.style.display='inline-flex';}else{mlinkEl.style.display='none';}}
-  const mdash=getMeta(p.id).link_dash;
+  const mdash=getMeta(p.id).link_dash||p.link_dash||'';
   const mdashEl=document.getElementById('m-link-dash');
   if(mdashEl){if(mdash){mdashEl.href=mdash;mdashEl.style.display='inline-flex';}else{mdashEl.style.display='none';}}
   const lnk=document.getElementById('m-link');
