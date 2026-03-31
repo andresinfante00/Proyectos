@@ -15,12 +15,14 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .brand-text h1{font-size:17px;font-weight:800;letter-spacing:-.4px}
 .brand-text p{font-size:11px;color:var(--ink3);margin-top:2px}
 .view-toggle{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:4px;border:1px solid var(--border);margin-left:auto}
-.vt-btn{padding:7px 16px;border-radius:7px;border:none;font-family:inherit;font-size:12px;font-weight:700;color:var(--ink3);background:transparent;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.vt-btn{padding:7px 14px;border-radius:7px;border:none;font-family:inherit;font-size:11.5px;font-weight:700;color:var(--ink3);background:transparent;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap}
 .vt-btn.active{background:var(--card);color:var(--purple);box-shadow:0 1px 6px rgba(0,0,0,.08)}
-.header-meta{display:flex;gap:24px;margin-left:16px}
+.header-meta{display:flex;gap:20px;margin-left:12px}
 .meta .lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink4)}
 .meta .val{font-size:12px;font-weight:600;color:var(--ink2);margin-top:2px}
 .view{display:none}.view.active{display:block}
+
+/* ─── PORTAL ─── */
 .portal-wrap{max-width:1140px;margin:0 auto;padding:36px 24px 60px}
 .stats-row{display:flex;gap:14px;margin-bottom:28px;flex-wrap:wrap}
 .stat-card{flex:1;min-width:130px;background:var(--card);border-radius:14px;border:1.5px solid var(--border);padding:16px 20px;display:flex;flex-direction:column;gap:4px}
@@ -58,13 +60,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .dot-live{background:var(--green);box-shadow:0 0 0 3px rgba(13,159,110,.15)}
 .dot-dev{background:var(--amber);box-shadow:0 0 0 3px rgba(192,115,20,.15)}
 .dot-pend{background:var(--ink4)}
-.cf-link{font-size:10px;font-weight:600;color:var(--purple);display:flex;align-items:center;gap:4px;text-decoration:none}
+.cf-link{font-size:10px;font-weight:600;color:var(--purple);display:flex;align-items:center;gap:4px}
 .cf-q{font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px}
 .q-Q1{background:var(--green-bg);color:var(--green);border:1px solid var(--green-b)}
 .q-Q2{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-b)}
 .empty{text-align:center;padding:50px 20px;color:var(--ink3);display:none;flex-direction:column;align-items:center;gap:10px}
 .vis-btn{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:10px;font-weight:700;color:var(--ink3);cursor:pointer;font-family:inherit;transition:all .15s;margin-left:auto}
 .vis-btn:hover{border-color:var(--purple-b);color:var(--purple);background:var(--purple-bg)}
+
+/* ─── CUADRO DE MANDO ─── */
 .mando-wrap{max-width:1280px;margin:0 auto;padding:28px 24px 60px}
 .trim-tabs{display:flex;gap:6px;margin-bottom:22px;background:var(--card);border-radius:14px;border:1.5px solid var(--border);padding:6px;width:fit-content}
 .ttab{padding:8px 22px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .2s;color:var(--ink3);background:transparent}
@@ -116,12 +120,14 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .sb-prog{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-b)}.sb-prog::before{background:var(--blue)}
 .sb-warn{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-b)}.sb-warn::before{background:var(--amber)}
 .sb-pend{background:#F4F5FA;color:var(--ink3);border:1px solid var(--border)}.sb-pend::before{background:var(--ink4)}
+
+/* ─── ACTUALIZAR AVANCE ─── */
 .avance-wrap{max-width:1100px;margin:0 auto;padding:36px 24px 60px}
-.avance-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:20px}
-.avance-title{font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.3px}
-.avance-sub{font-size:12px;color:var(--ink3);margin-top:4px}
-.avance-saved{display:inline-flex;align-items:center;gap:6px;background:var(--green-bg);border:1px solid var(--green-b);border-radius:20px;padding:7px 16px;font-size:11px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;flex-shrink:0}
-.avance-saved.show{opacity:1}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:20px}
+.page-title{font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.3px}
+.page-sub{font-size:12px;color:var(--ink3);margin-top:4px}
+.saved-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-bg);border:1px solid var(--green-b);border-radius:20px;padding:7px 16px;font-size:11px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;flex-shrink:0}
+.saved-badge.show{opacity:1}
 .avance-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
 .avance-card{background:var(--card);border-radius:16px;border:1.5px solid var(--border);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .avance-card-top{padding:16px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
@@ -142,6 +148,81 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .avance-save-btn{flex:1;height:36px;border-radius:9px;border:none;font-family:inherit;font-size:12px;font-weight:700;color:white;background:var(--purple);cursor:pointer;transition:all .2s}
 .avance-save-btn:hover{background:#4a3ec0}
 .avance-save-btn.saved{background:var(--green)}
+
+/* ─── EDITAR PROYECTOS ─── */
+.editar-wrap{max-width:1200px;margin:0 auto;padding:36px 24px 60px}
+.editar-layout{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start}
+.proj-selector{background:var(--card);border-radius:16px;border:1.5px solid var(--border);overflow:hidden;position:sticky;top:88px}
+.proj-selector-head{padding:16px 18px;border-bottom:1px solid var(--border)}
+.proj-selector-title{font-size:12px;font-weight:800;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+.proj-selector-sub{font-size:10px;color:var(--ink3);margin-top:3px}
+.proj-list{padding:8px}
+.proj-list-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .15s;border:1.5px solid transparent}
+.proj-list-item:hover{background:var(--bg)}
+.proj-list-item.active{background:var(--purple-bg);border-color:var(--purple-b)}
+.proj-list-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid}
+.proj-list-name{font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.3}
+.proj-list-id{font-size:9.5px;font-family:'JetBrains Mono',monospace;color:var(--ink3)}
+.proj-list-item.active .proj-list-name{color:var(--purple)}
+.edit-panel{display:flex;flex-direction:column;gap:16px}
+.edit-card{background:var(--card);border-radius:16px;border:1.5px solid var(--border);overflow:hidden}
+.edit-card-head{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.edit-card-title{font-size:13px;font-weight:800;color:var(--ink)}
+.edit-card-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-row.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em}
+.form-input,.form-select,.form-textarea{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;outline:none;transition:border-color .15s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple-b);background:var(--card)}
+.form-textarea{resize:vertical;min-height:90px;line-height:1.6}
+.prio-grid{display:flex;gap:8px}
+.prio-opt{flex:1;padding:10px 8px;border-radius:10px;border:1.5px solid var(--border);text-align:center;cursor:pointer;font-size:11px;font-weight:700;transition:all .15s;user-select:none}
+.prio-opt:hover{border-color:var(--ink4)}
+.prio-opt.alta{}.prio-opt.alta.sel{background:var(--red-bg);border-color:var(--red-b);color:var(--red)}
+.prio-opt.media.sel{background:var(--amber-bg);border-color:var(--amber-b);color:var(--amber)}
+.prio-opt.baja.sel{background:var(--green-bg);border-color:var(--green-b);color:var(--green)}
+.prio-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 5px}
+.prio-opt.alta .prio-dot{background:var(--red)}
+.prio-opt.media .prio-dot{background:var(--amber)}
+.prio-opt.baja .prio-dot{background:var(--green)}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;min-height:44px;cursor:text;background:var(--bg);transition:border-color .15s}
+.chips-wrap:focus-within{border-color:var(--purple-b);background:var(--card)}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--purple-bg);border:1px solid var(--purple-b);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--purple)}
+.chip-del{cursor:pointer;opacity:.6;line-height:1;font-size:14px}
+.chip-del:hover{opacity:1}
+.chip-input{border:none;outline:none;background:transparent;font-family:inherit;font-size:12px;color:var(--ink);min-width:80px;flex:1}
+
+/* tareas */
+.task-table-wrap{overflow:hidden}
+.task-table{width:100%;border-collapse:collapse}
+.task-table th{background:#F4F5FA;padding:10px 12px;text-align:left;font-size:9.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;border-bottom:1.5px solid var(--border)}
+.task-table td{padding:8px 10px;border-bottom:1px solid #F4F5FA;vertical-align:middle;font-size:12px}
+.task-table tr:last-child td{border-bottom:none}
+.task-num{width:40px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--ink4)}
+.task-inp{width:100%;border:1.5px solid transparent;border-radius:7px;padding:6px 10px;font-family:inherit;font-size:12px;color:var(--ink);background:transparent;outline:none;transition:all .15s}
+.task-inp:hover{background:var(--bg);border-color:var(--border)}
+.task-inp:focus{background:var(--card);border-color:var(--purple-b)}
+.task-sel{width:100%;border:1.5px solid transparent;border-radius:7px;padding:5px 8px;font-family:inherit;font-size:11.5px;color:var(--ink);background:transparent;cursor:pointer;outline:none;transition:all .15s}
+.task-sel:hover{background:var(--bg);border-color:var(--border)}
+.task-sel:focus{background:var(--card);border-color:var(--purple-b)}
+.task-del{width:30px;text-align:center;cursor:pointer;color:var(--ink4);font-size:16px;line-height:1;transition:color .15s}
+.task-del:hover{color:var(--red)}
+.task-status-si{background:var(--green-bg);color:var(--green);border:1px solid var(--green-b);border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700}
+.task-status-ep{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-b);border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700}
+.task-status-ni{background:#F4F5FA;color:var(--ink3);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700}
+.btn-add-task{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1.5px dashed var(--border);border-radius:9px;padding:9px 16px;font-size:12px;font-weight:700;color:var(--ink3);cursor:pointer;font-family:inherit;transition:all .15s;margin-top:10px}
+.btn-add-task:hover{border-color:var(--purple-b);color:var(--purple);background:var(--purple-bg)}
+.btn-save-project{background:var(--purple);color:white;border:none;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;transition:all .15s}
+.btn-save-project:hover{background:#4a3ec0}
+.btn-save-project.saved{background:var(--green)}
+.task-progress{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg);border-radius:9px;border:1.5px solid var(--border)}
+.task-prog-bar-bg{flex:1;height:6px;border-radius:3px;background:var(--border);overflow:hidden}
+.task-prog-bar-fill{height:100%;border-radius:3px;background:var(--purple);transition:width .4s}
+.task-prog-label{font-size:11px;font-weight:700;color:var(--ink3);white-space:nowrap}
+.task-prog-pct{font-size:11px;font-weight:800;color:var(--purple);font-family:'JetBrains Mono',monospace;white-space:nowrap;min-width:32px;text-align:right}
+
+/* ─── MODAL ─── */
 .modal-overlay{position:fixed;inset:0;background:rgba(15,17,23,.55);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:32px 16px;opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--card);border-radius:20px;width:780px;max-width:100%;box-shadow:0 32px 80px rgba(0,0,0,.28);transform:translateY(24px);transition:transform .28s;overflow:hidden}
@@ -183,6 +264,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .btn-ver.disabled{background:var(--bg);color:var(--ink4);border:1px solid var(--border);cursor:default;pointer-events:none}
 .btn-close-modal{background:var(--bg);color:var(--ink3);border:1.5px solid var(--border);border-radius:10px;padding:10px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
 .btn-close-modal:hover{border-color:var(--ink4);color:var(--ink)}
+
+/* ─── VIS PANEL ─── */
 .vis-panel-overlay{position:fixed;inset:0;background:rgba(15,17,23,.45);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:flex-start;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
 .vis-panel-overlay.open{opacity:1;pointer-events:all}
 .vis-panel{background:var(--card);width:360px;height:100vh;overflow-y:auto;box-shadow:-12px 0 40px rgba(0,0,0,.15);transform:translateX(20px);transition:transform .25s;display:flex;flex-direction:column}
@@ -209,15 +292,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </style>
 </head>
 <body>
+
 <div class="header">
   <div class="brand">
     <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
     <div class="brand-text"><h1>Portal de Proyectos</h1><p>Manufactura Confitería · Talento Humano</p></div>
   </div>
   <div class="view-toggle">
-    <button class="vt-btn active" id="btn-portal" onclick="setView('portal')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Portal</button>
-    <button class="vt-btn" id="btn-mando" onclick="setView('mando')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Cuadro de Mando</button>
-    <button class="vt-btn" id="btn-avance" onclick="setView('avance')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Actualizar Avance</button>
+    <button class="vt-btn active" id="btn-portal" onclick="setView('portal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Portal</button>
+    <button class="vt-btn" id="btn-mando" onclick="setView('mando')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Cuadro de Mando</button>
+    <button class="vt-btn" id="btn-avance" onclick="setView('avance')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Actualizar Avance</button>
+    <button class="vt-btn" id="btn-editar" onclick="setView('editar')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editar Proyectos</button>
   </div>
   <div class="header-meta">
     <div class="meta"><div class="lbl">Sponsor</div><div class="val">Juan Álvarez</div></div>
@@ -226,6 +311,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
+<!-- PORTAL -->
 <div class="view active" id="view-portal">
 <div class="portal-wrap">
   <div class="stats-row">
@@ -241,6 +327,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 </div>
 
+<!-- CUADRO DE MANDO -->
 <div class="view" id="view-mando">
 <div class="mando-wrap">
   <div class="trim-tabs"><button class="ttab active" data-q="Q1" onclick="setQ('Q1')">Q1 · Ene–Mar 2026</button><button class="ttab" data-q="Q2" onclick="setQ('Q2')">Q2 · Abr–Jun 2026</button><button class="ttab" data-q="Q3" onclick="setQ('Q3')">Q3 · Jul–Sep 2026</button><button class="ttab" data-q="Q4" onclick="setQ('Q4')">Q4 · Oct–Dic 2026</button></div>
@@ -250,16 +337,35 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </div>
 </div>
 
+<!-- ACTUALIZAR AVANCE -->
 <div class="view" id="view-avance">
 <div class="avance-wrap">
-  <div class="avance-header">
-    <div><div class="avance-title">Actualizar Avance</div><div class="avance-sub">Mueve el slider o escribe directamente el porcentaje. Los cambios se guardan y se reflejan en el Portal y el Cuadro de Mando.</div></div>
-    <div class="avance-saved" id="avance-saved"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Guardado</div>
+  <div class="page-header">
+    <div><div class="page-title">Actualizar Avance</div><div class="page-sub">Mueve el slider o escribe el porcentaje. Los cambios se reflejan en el Portal y el Cuadro de Mando.</div></div>
+    <div class="saved-badge" id="avance-saved"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Guardado</div>
   </div>
   <div class="avance-grid" id="avance-grid"></div>
 </div>
 </div>
 
+<!-- EDITAR PROYECTOS -->
+<div class="view" id="view-editar">
+<div class="editar-wrap">
+  <div class="page-header">
+    <div><div class="page-title">Editar Proyectos</div><div class="page-sub">Actualiza la información, prioridad, impactos, indicadores y plan de actividades de cada proyecto.</div></div>
+    <div class="saved-badge" id="editar-saved"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Proyecto guardado</div>
+  </div>
+  <div class="editar-layout">
+    <div class="proj-selector">
+      <div class="proj-selector-head"><div class="proj-selector-title">Proyectos</div><div class="proj-selector-sub">Selecciona para editar</div></div>
+      <div class="proj-list" id="editar-proj-list"></div>
+    </div>
+    <div class="edit-panel" id="edit-panel"></div>
+  </div>
+</div>
+</div>
+
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeIfBg(event)">
   <div class="modal">
     <div class="modal-head"><div class="modal-head-icon" id="m-icon"></div><div><div class="modal-head-title" id="m-title">—</div><div class="modal-head-sub" id="m-sub">—</div></div><button class="modal-close" onclick="closeModal()">✕</button></div>
@@ -277,6 +383,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
+<!-- VIS PANEL -->
 <div class="vis-panel-overlay" id="vis-overlay" onclick="closeVisPanelIfBg(event)">
   <div class="vis-panel">
     <div class="vis-panel-head"><div class="vis-panel-title">Gestionar visibilidad</div><button class="vis-panel-close" onclick="closeVisPanel()">✕</button></div>
@@ -288,6 +395,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <script>
 const VIS_KEY='pdi_portal_visibility_v1';
 const AVANCE_KEY='pdi_avance_v1';
+const META_KEY='pdi_meta_v1';
+
 const BASE=[
   {id:'PDI-007',nombre:'Gestión de Novedades',sub:'Flujo gerencial · Talento Humano',desc:'Tablero de novedades pendientes por responsable: justificación de inasistencias y validación de horas adicionales por Centro, Planta y Línea. Incluye análisis de causas y tendencia semanal.',tags:['Talento Humano','Snowflake','Streamlit'],badge:'EN DEV',bbg:'var(--amber-bg)',bc:'var(--amber)',bbd:'var(--amber-b)',ibg:'var(--purple-bg)',ibd:'var(--purple-b)',sdot:'dot-dev',slbl:'En desarrollo',sc:'var(--amber)',link:'flujo_novedades_3col_1.html',llbl:'Ver tablero',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:80,ejecutor:'Andres Infante',req:true,disp:true,oper:true,rep:true},
   {id:'PDI-008',nombre:'Notificaciones por Plantilla',sub:'Envío automatizado de comunicaciones',desc:'Sistema de notificaciones basado en plantillas para automatizar comunicaciones a colaboradores según eventos del flujo de producción.',tags:['Por definir'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--teal-bg)',ibd:'var(--teal-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:'pdi_008_notificaciones_plantilla.html',llbl:'Ver proyecto',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:0,ejecutor:'Por definir',req:false,disp:false,oper:false,rep:false},
@@ -300,27 +409,48 @@ const BASE=[
   {id:'PDI-006',nombre:'Bitácora Digital Bianchi',sub:'Registro digital de operaciones',desc:'Bitácora digital para el registro de operaciones en la planta Bianchi.',tags:['Bianchi','Operaciones'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--rose-bg)',ibd:'var(--rose-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:95,ejecutor:'Sebastian Giraldo',req:true,disp:true,oper:true,rep:true},
 ];
 const IC={'PDI-007':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>','PDI-008':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A7B65" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>','PDI-009':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A6DB5" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>','PDI-001':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>','PDI-002':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D9F6E" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>','PDI-003':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C07314" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>','PDI-004':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>','PDI-005':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3730A3" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>','PDI-006':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B5265A" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>'};
+const IC_SM={'PDI-007':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>','PDI-008':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A7B65" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>','PDI-009':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A6DB5" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>','PDI-001':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>','PDI-002':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D9F6E" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>','PDI-003':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C07314" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>','PDI-004':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>','PDI-005':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3730A3" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>','PDI-006':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B5265A" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>'};
+
 let P=BASE.map(p=>({...p}));
 let visState={};
+let metaState={};
+let editingIdx=0;
+
 function pc(a){return a>=100?'#0D9F6E':a>=70?'#1A6DB5':a>=30?'#C07314':'#C0392B'}
 function stA(a){return a>=100?{c:'sb-done',l:'Completado'}:a>=70?{c:'sb-prog',l:'En progreso'}:a>=30?{c:'sb-warn',l:'En riesgo'}:{c:'sb-pend',l:'Iniciado'}}
-function loadAll(){try{const av=localStorage.getItem(AVANCE_KEY);if(av){const s=JSON.parse(av);P.forEach(p=>{if(s[p.id]!==undefined)p.avance=s[p.id];});}}catch(e){}try{const s=localStorage.getItem(VIS_KEY);visState=s?JSON.parse(s):{};P.forEach(p=>{if(visState[p.id]===undefined)visState[p.id]=true;});}catch(e){P.forEach(p=>visState[p.id]=true);}}
+
+function loadAll(){
+  try{const av=localStorage.getItem(AVANCE_KEY);if(av){const s=JSON.parse(av);P.forEach(p=>{if(s[p.id]!==undefined)p.avance=s[p.id];});}}catch(e){}
+  try{const s=localStorage.getItem(VIS_KEY);visState=s?JSON.parse(s):{};P.forEach(p=>{if(visState[p.id]===undefined)visState[p.id]=true;});}catch(e){P.forEach(p=>visState[p.id]=true);}
+  try{const s=localStorage.getItem(META_KEY);metaState=s?JSON.parse(s):{};}catch(e){metaState={};}
+  P.forEach(p=>{if(!metaState[p.id])metaState[p.id]={prioridad:'',impactos:[],indicadores:[],tareas:[]};});
+}
 function saveAvance(){const av={};P.forEach(p=>av[p.id]=p.avance);try{localStorage.setItem(AVANCE_KEY,JSON.stringify(av));}catch(e){}}
 function saveVis(){try{localStorage.setItem(VIS_KEY,JSON.stringify(visState));}catch(e){}}
+function saveMeta(){try{localStorage.setItem(META_KEY,JSON.stringify(metaState));}catch(e){}}
 function isVisible(id){return visState[id]!==false;}
+function getMeta(id){return metaState[id]||(metaState[id]={prioridad:'',impactos:[],indicadores:[],tareas:[]},metaState[id]);}
+
+/* ── PORTAL ── */
 function renderCards(){
   document.getElementById('card-grid').innerHTML=P.map((p,i)=>{
     if(!isVisible(p.id))return'';
     const col=pc(p.avance);
     const pr=p.avance>0?`<div class="card-prog"><div class="card-prog-row"><span class="card-prog-label">Avance</span><span class="card-prog-val" style="color:${col}">${p.avance}%</span></div><div class="card-prog-bar"><div class="card-prog-fill" style="width:${p.avance}%;background:${col}"></div></div></div>`:'';
     const qp=p.q?`<span class="cf-q q-${p.q}">${p.q}</span>`:'';
-    return `<div class="project-card" onclick="openModal(${i})" data-tags="${p.id.toLowerCase()} ${p.nombre.toLowerCase()} ${p.ejecutor.toLowerCase()}"><div class="card-top"><div class="card-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div><div class="card-info"><div class="card-title">${p.nombre}</div><div class="card-sub">${p.sub}</div></div><div class="card-badge" style="background:${p.bbg};color:${p.bc};border-color:${p.bbd}">${p.badge}</div></div><div class="card-body"><div class="card-desc">${p.desc}</div>${pr}<div class="card-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<span class="tag">${p.id}</span></div></div><div class="card-footer"><div class="cf-status"><div class="status-dot ${p.sdot}"></div><span style="color:${p.sc}">${p.slbl}</span>${qp}</div><span class="cf-link">Ver detalle <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>`;
+    const m=getMeta(p.id);
+    const prioHtml=m.prioridad?` <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;${m.prioridad==='Alta'?'background:var(--red-bg);color:var(--red)':m.prioridad==='Media'?'background:var(--amber-bg);color:var(--amber)':'background:var(--green-bg);color:var(--green)'}">${m.prioridad}</span>`:'';
+    return `<div class="project-card" onclick="openModal(${i})" data-tags="${p.id.toLowerCase()} ${p.nombre.toLowerCase()} ${p.ejecutor.toLowerCase()}"><div class="card-top"><div class="card-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div><div class="card-info"><div class="card-title">${p.nombre}${prioHtml}</div><div class="card-sub">${p.sub}</div></div><div class="card-badge" style="background:${p.bbg};color:${p.bc};border-color:${p.bbd}">${p.badge}</div></div><div class="card-body"><div class="card-desc">${p.desc}</div>${pr}<div class="card-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<span class="tag">${p.id}</span></div></div><div class="card-footer"><div class="cf-status"><div class="status-dot ${p.sdot}"></div><span style="color:${p.sc}">${p.slbl}</span>${qp}</div><span class="cf-link">Ver detalle <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>`;
   }).join('');
   updateStats();
 }
 function updateStats(){const cards=document.querySelectorAll('.project-card');let live=0,dev=0,pend=0;cards.forEach(c=>{const t=(c.querySelector('.card-badge')||{}).textContent||'';if(t==='LIVE')live++;else if(t==='EN DEV')dev++;else pend++;});document.getElementById('stat-total').textContent=cards.length;document.getElementById('stat-live').textContent=live;document.getElementById('stat-dev').textContent=dev;document.getElementById('stat-pend').textContent=pend;}
 function filterCards(){const q=document.getElementById('search-input').value.toLowerCase().trim();const cards=document.querySelectorAll('.project-card');let v=0;cards.forEach(c=>{const show=!q||(c.textContent+(c.dataset.tags||'')).toLowerCase().includes(q);c.style.display=show?'':'none';if(show)v++;});document.getElementById('empty-state').style.display=v===0?'flex':'none';}
-function setView(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');['portal','mando','avance'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===v));if(v==='mando')renderMando('Q1');if(v==='avance')renderAvance();}
+
+/* ── VIEWS ── */
+function setView(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');['portal','mando','avance','editar'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===v));if(v==='mando')renderMando('Q1');if(v==='avance')renderAvance();if(v==='editar')renderEditar();}
+
+/* ── CUADRO DE MANDO ── */
 const QC={Q1:{m:'#0D9F6E',bg:'rgba(13,159,110,.1)',bd:'rgba(13,159,110,.25)'},Q2:{m:'#1A6DB5',bg:'rgba(26,109,181,.1)',bd:'rgba(26,109,181,.25)'},Q3:{m:'#C07314',bg:'rgba(192,115,20,.1)',bd:'rgba(192,115,20,.25)'},Q4:{m:'#5B4FD4',bg:'rgba(91,79,212,.1)',bd:'rgba(91,79,212,.25)'}};
 function setQ(q){document.querySelectorAll('.ttab').forEach(t=>t.classList.toggle('active',t.dataset.q===q));renderMando(q);}
 function renderMando(q){
@@ -337,64 +467,162 @@ function renderMando(q){
   const chk=v=>v?`<div class="chk chk-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></div>`:`<div class="chk chk-no"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>`;
   document.getElementById('mando-table-body').innerHTML=`<table class="mando-table"><thead><tr><th>C\u00f3digo</th><th>Proyecto</th><th>Inicio</th><th>Fin</th><th style="min-width:140px">Avance</th><th style="text-align:center">App Req.</th><th style="text-align:center">App Disp.</th><th style="text-align:center">App Oper.</th><th style="text-align:center">Reporte</th><th>Estado</th></tr></thead><tbody>${qp.map(p=>{const gi=P.indexOf(p),col=pc(p.avance),st=stA(p.avance);return`<tr onclick="openModal(${gi})"><td><span class="proj-id-badge">${p.id}</span></td><td><div class="proj-name-cell">${p.nombre}</div><div class="proj-exec-cell">${p.ejecutor}</div></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px">${p.inicio}</td><td style="font-family:'JetBrains Mono',monospace;font-size:11px">${p.fin}</td><td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${p.avance}%;background:${col}"></div></div><span class="prog-pct" style="color:${col}">${p.avance}%</span></div></td><td style="text-align:center">${chk(p.req)}</td><td style="text-align:center">${chk(p.disp)}</td><td style="text-align:center">${chk(p.oper)}</td><td style="text-align:center">${chk(p.rep)}</td><td><span class="sb ${st.c}">${st.l}</span></td></tr>`}).join('')}</tbody></table>`;
 }
+
+/* ── ACTUALIZAR AVANCE ── */
 function renderAvance(){
   document.getElementById('avance-grid').innerHTML=P.map((p,i)=>{
     const col=pc(p.avance),st=stA(p.avance);
-    return `<div class="avance-card">
-      <div class="avance-card-top">
-        <div class="avance-card-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div>
-        <div style="flex:1;min-width:0"><div class="avance-card-name">${p.nombre}</div><div class="avance-card-id">${p.id} &nbsp;&nbsp;<span class="sb ${st.c}" style="font-size:9px;padding:2px 8px">${st.l}</span></div></div>
-      </div>
-      <div class="avance-card-body">
-        <div class="avance-pct-row"><span class="avance-pct-label">Avance actual</span><span class="avance-pct-val" id="av-val-${i}" style="color:${col}">${p.avance}%</span></div>
-        <div class="avance-bar-bg"><div class="avance-bar-fill" id="av-bar-${i}" style="width:${p.avance}%;background:${col}"></div></div>
-        <div class="avance-slider-row">
-          <span style="font-size:10px;color:var(--ink4)">0%</span>
-          <input type="range" min="0" max="100" step="1" value="${p.avance}" class="avance-slider" oninput="liveAv(${i},this.value)">
-          <span style="font-size:10px;color:var(--ink4)">100%</span>
-        </div>
-        <div class="avance-actions">
-          <input type="number" min="0" max="100" value="${p.avance}" class="avance-input" id="av-inp-${i}" oninput="liveAv(${i},this.value)" placeholder="%">
-          <button class="avance-save-btn" id="av-btn-${i}" onclick="saveAv(${i})">Guardar</button>
-        </div>
-      </div>
-    </div>`;
+    return `<div class="avance-card"><div class="avance-card-top"><div class="avance-card-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div><div style="flex:1;min-width:0"><div class="avance-card-name">${p.nombre}</div><div class="avance-card-id">${p.id} &nbsp;<span class="sb ${st.c}" style="font-size:9px;padding:2px 8px">${st.l}</span></div></div></div><div class="avance-card-body"><div class="avance-pct-row"><span class="avance-pct-label">Avance actual</span><span class="avance-pct-val" id="av-val-${i}" style="color:${col}">${p.avance}%</span></div><div class="avance-bar-bg"><div class="avance-bar-fill" id="av-bar-${i}" style="width:${p.avance}%;background:${col}"></div></div><div class="avance-slider-row"><span style="font-size:10px;color:var(--ink4)">0%</span><input type="range" min="0" max="100" step="1" value="${p.avance}" class="avance-slider" oninput="liveAv(${i},this.value)"><span style="font-size:10px;color:var(--ink4)">100%</span></div><div class="avance-actions"><input type="number" min="0" max="100" value="${p.avance}" class="avance-input" id="av-inp-${i}" oninput="liveAv(${i},this.value)" placeholder="%"><button class="avance-save-btn" id="av-btn-${i}" onclick="saveAv(${i})">Guardar</button></div></div></div>`;
   }).join('');
 }
-function liveAv(i,val){
-  const v=Math.min(100,Math.max(0,parseInt(val)||0));
-  const col=pc(v);
-  const valEl=document.getElementById('av-val-'+i);
-  const barEl=document.getElementById('av-bar-'+i);
-  const inpEl=document.getElementById('av-inp-'+i);
-  const sliders=document.querySelectorAll('.avance-slider');
-  if(valEl){valEl.textContent=v+'%';valEl.style.color=col;}
-  if(barEl){barEl.style.width=v+'%';barEl.style.background=col;}
-  if(inpEl&&parseInt(inpEl.value)!==v)inpEl.value=v;
-  if(sliders[i]&&parseInt(sliders[i].value)!==v)sliders[i].value=v;
+function liveAv(i,val){const v=Math.min(100,Math.max(0,parseInt(val)||0));const col=pc(v);const ve=document.getElementById('av-val-'+i);const be=document.getElementById('av-bar-'+i);const ie=document.getElementById('av-inp-'+i);const sliders=document.querySelectorAll('.avance-slider');if(ve){ve.textContent=v+'%';ve.style.color=col;}if(be){be.style.width=v+'%';be.style.background=col;}if(ie&&parseInt(ie.value)!==v)ie.value=v;if(sliders[i]&&parseInt(sliders[i].value)!==v)sliders[i].value=v;}
+function saveAv(i){const ie=document.getElementById('av-inp-'+i);const v=Math.min(100,Math.max(0,parseInt(ie?ie.value:0)||0));P[i].avance=v;saveAvance();const btn=document.getElementById('av-btn-'+i);if(btn){btn.textContent='\u2713 Guardado';btn.classList.add('saved');setTimeout(()=>{btn.textContent='Guardar';btn.classList.remove('saved');},1800);}showBadge('avance-saved');renderCards();}
+
+/* ── EDITAR PROYECTOS ── */
+function renderEditar(){
+  document.getElementById('editar-proj-list').innerHTML=P.map((p,i)=>`<div class="proj-list-item ${i===editingIdx?'active':''}" onclick="selectEditProj(${i})"><div class="proj-list-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC_SM[p.id]||''}</div><div style="min-width:0"><div class="proj-list-name">${p.nombre}</div><div class="proj-list-id">${p.id}</div></div></div>`).join('');
+  renderEditPanel();
 }
-function saveAv(i){
-  const inp=document.getElementById('av-inp-'+i);
-  const v=Math.min(100,Math.max(0,parseInt(inp?inp.value:0)||0));
-  P[i].avance=v;
-  saveAvance();
-  const btn=document.getElementById('av-btn-'+i);
-  if(btn){btn.textContent='\u2713 Guardado';btn.classList.add('saved');setTimeout(()=>{btn.textContent='Guardar';btn.classList.remove('saved');},1800);}
-  const badge=document.getElementById('avance-saved');
-  if(badge){badge.classList.add('show');setTimeout(()=>badge.classList.remove('show'),2200);}
+function selectEditProj(i){editingIdx=i;renderEditar();}
+function taskStatusClass(s){return s==='Finalizado'?'task-status-si':s==='En Proceso'?'task-status-ep':'task-status-ni';}
+function taskProgress(tareas){const t=tareas.length;if(!t)return null;const done=tareas.filter(x=>x.estado==='Finalizado').length;const pct=Math.round(done/t*100);return{done,t,pct};}
+
+function renderEditPanel(){
+  const p=P[editingIdx];
+  const m=getMeta(p.id);
+  const tp=taskProgress(m.tareas);
+  document.getElementById('edit-panel').innerHTML=`
+    <!-- INFO GENERAL -->
+    <div class="edit-card">
+      <div class="edit-card-head">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:9px;background:${p.ibg};border:1.5px solid ${p.ibd};display:flex;align-items:center;justify-content:center">${IC_SM[p.id]||''}</div>
+          <div><div class="edit-card-title">${p.nombre}</div><div style="font-size:10px;color:var(--ink3);font-family:'JetBrains Mono',monospace;margin-top:2px">${p.id}</div></div>
+        </div>
+      </div>
+      <div class="edit-card-body">
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Descripción del proyecto</label>
+            <textarea class="form-textarea" id="ep-desc" rows="3">${p.desc||''}</textarea>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Prioridad</label>
+            <div class="prio-grid">
+              <div class="prio-opt alta ${m.prioridad==='Alta'?'sel':''}" onclick="setPrio('Alta')"><div class="prio-dot"></div>Alta</div>
+              <div class="prio-opt media ${m.prioridad==='Media'?'sel':''}" onclick="setPrio('Media')"><div class="prio-dot"></div>Media</div>
+              <div class="prio-opt baja ${m.prioridad==='Baja'?'sel':''}" onclick="setPrio('Baja')"><div class="prio-dot"></div>Baja</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ejecutor</label>
+            <input class="form-input" id="ep-exec" value="${p.ejecutor||''}">
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Impactos esperados <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink4)">(Enter para agregar)</span></label>
+            <div class="chips-wrap" id="impactos-wrap" onclick="document.getElementById('impacto-inp').focus()">
+              ${m.impactos.map((v,i)=>`<span class="chip">${v}<span class="chip-del" onclick="removeChip('impactos',${i})">×</span></span>`).join('')}
+              <input class="chip-input" id="impacto-inp" placeholder="Ej: Reducir ausentismo…" onkeydown="addChip(event,'impactos','impacto-inp')">
+            </div>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Indicadores clave <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink4)">(Enter para agregar)</span></label>
+            <div class="chips-wrap" id="indicadores-wrap" onclick="document.getElementById('indicador-inp').focus()">
+              ${m.indicadores.map((v,i)=>`<span class="chip">${v}<span class="chip-del" onclick="removeChip('indicadores',${i})">×</span></span>`).join('')}
+              <input class="chip-input" id="indicador-inp" placeholder="Ej: % Justificación ≥ 95%…" onkeydown="addChip(event,'indicadores','indicador-inp')">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAN DE ACTIVIDADES -->
+    <div class="edit-card">
+      <div class="edit-card-head">
+        <div class="edit-card-title">Plan de Actividades</div>
+        ${tp?`<div class="task-progress" style="min-width:240px"><span class="task-prog-label">${tp.done}/${tp.t} finalizadas</span><div class="task-prog-bar-bg"><div class="task-prog-bar-fill" style="width:${tp.pct}%"></div></div><span class="task-prog-pct">${tp.pct}%</span></div>`:''}
+      </div>
+      <div class="task-table-wrap">
+        <table class="task-table">
+          <thead><tr>
+            <th style="width:44px">#</th>
+            <th>Nombre de la Actividad</th>
+            <th style="width:180px">Responsable</th>
+            <th style="width:150px">Estado</th>
+            <th style="width:36px"></th>
+          </tr></thead>
+          <tbody id="task-tbody">
+            ${m.tareas.map((t,i)=>`<tr>
+              <td class="task-num">${String(i+1).padStart(2,'0')}</td>
+              <td><input class="task-inp" value="${t.nombre||''}" placeholder="Nombre de la actividad…" oninput="updateTask(${i},'nombre',this.value)"></td>
+              <td><input class="task-inp" value="${t.responsable||''}" placeholder="Responsable…" oninput="updateTask(${i},'responsable',this.value)"></td>
+              <td>
+                <select class="task-sel" onchange="updateTask(${i},'estado',this.value)">
+                  <option ${t.estado==='Sin Iniciar'?'selected':''}>Sin Iniciar</option>
+                  <option ${t.estado==='En Proceso'?'selected':''}>En Proceso</option>
+                  <option ${t.estado==='Finalizado'?'selected':''}>Finalizado</option>
+                </select>
+              </td>
+              <td class="task-del" onclick="delTask(${i})">×</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+        <div style="padding:12px 16px">
+          <button class="btn-add-task" onclick="addTask()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Agregar actividad
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTÓN GUARDAR -->
+    <div style="display:flex;justify-content:flex-end">
+      <button class="btn-save-project" id="btn-save-proj" onclick="saveProject()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar proyecto
+      </button>
+    </div>`;
+}
+
+function setPrio(v){const m=getMeta(P[editingIdx].id);m.prioridad=v;document.querySelectorAll('.prio-opt').forEach(el=>{el.classList.remove('sel');if(el.classList.contains(v.toLowerCase()))el.classList.add('sel');});}
+function addChip(e,field,inputId){if(e.key==='Enter'){e.preventDefault();const inp=document.getElementById(inputId);const val=inp.value.trim();if(!val)return;getMeta(P[editingIdx].id)[field].push(val);inp.value='';const wrap=document.getElementById(field==='impactos'?'impactos-wrap':'indicadores-wrap');const chip=document.createElement('span');chip.className='chip';const idx=getMeta(P[editingIdx].id)[field].length-1;chip.innerHTML=`${val}<span class="chip-del" onclick="removeChip('${field}',${idx})">×</span>`;wrap.insertBefore(chip,inp);}}
+function removeChip(field,i){const m=getMeta(P[editingIdx].id);m[field].splice(i,1);renderEditPanel();}
+function addTask(){const m=getMeta(P[editingIdx].id);m.tareas.push({nombre:'',responsable:'',estado:'Sin Iniciar'});renderEditPanel();setTimeout(()=>{const rows=document.querySelectorAll('#task-tbody tr');if(rows.length){const inp=rows[rows.length-1].querySelector('.task-inp');if(inp)inp.focus();}},50);}
+function delTask(i){const m=getMeta(P[editingIdx].id);m.tareas.splice(i,1);renderEditPanel();}
+function updateTask(i,field,val){const m=getMeta(P[editingIdx].id);if(m.tareas[i])m.tareas[i][field]=val;}
+function saveProject(){
+  const p=P[editingIdx];
+  const m=getMeta(p.id);
+  const descEl=document.getElementById('ep-desc');
+  const execEl=document.getElementById('ep-exec');
+  if(descEl)p.desc=descEl.value;
+  if(execEl)p.ejecutor=execEl.value;
+  // read current task state from DOM before saving
+  document.querySelectorAll('#task-tbody tr').forEach((row,i)=>{if(!m.tareas[i])return;const inps=row.querySelectorAll('.task-inp');const sel=row.querySelector('.task-sel');if(inps[0])m.tareas[i].nombre=inps[0].value;if(inps[1])m.tareas[i].responsable=inps[1].value;if(sel)m.tareas[i].estado=sel.value;});
+  saveMeta();
+  const btn=document.getElementById('btn-save-proj');
+  if(btn){btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>\u2713 Guardado';btn.classList.add('saved');setTimeout(()=>{btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar proyecto';btn.classList.remove('saved');},2000);}
+  showBadge('editar-saved');
   renderCards();
 }
-function openVisPanel(){
-  const list=document.getElementById('vis-list');
-  list.innerHTML=P.map(p=>`<div class="vis-item ${isVisible(p.id)?'visible':''}" onclick="toggleVis('${p.id}')" id="vis-item-${p.id}"><div class="vis-item-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div><div class="vis-item-info"><div class="vis-item-name">${p.nombre}</div><div class="vis-item-id">${p.id}</div></div><div class="vis-toggle" id="vis-tog-${p.id}"></div></div>`).join('');
-  document.getElementById('vis-overlay').classList.add('open');
-}
+
+/* ── VIS PANEL ── */
+function openVisPanel(){const list=document.getElementById('vis-list');list.innerHTML=P.map(p=>`<div class="vis-item ${isVisible(p.id)?'visible':''}" onclick="toggleVis('${p.id}')" id="vis-item-${p.id}"><div class="vis-item-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC_SM[p.id]||''}</div><div class="vis-item-info"><div class="vis-item-name">${p.nombre}</div><div class="vis-item-id">${p.id}</div></div><div class="vis-toggle" id="vis-tog-${p.id}"></div></div>`).join('');document.getElementById('vis-overlay').classList.add('open');}
 function closeVisPanel(){document.getElementById('vis-overlay').classList.remove('open');renderCards();}
 function closeVisPanelIfBg(e){if(e.target===document.getElementById('vis-overlay'))closeVisPanel();}
 function toggleVis(id){visState[id]=!visState[id];saveVis();const item=document.getElementById('vis-item-'+id);if(item)item.classList.toggle('visible',visState[id]);}
 function toggleAll(){const allOn=P.every(p=>isVisible(p.id));P.forEach(p=>{visState[p.id]=!allOn;saveVis();const item=document.getElementById('vis-item-'+p.id);if(item)item.classList.toggle('visible',visState[p.id]);});}
+
+/* ── MODAL ── */
 function openModal(i){
-  const p=P[i],col=pc(p.avance);
+  const p=P[i],col=pc(p.avance),m=getMeta(p.id);
   document.getElementById('m-icon').style.cssText=`background:${p.ibg};border-color:${p.ibd}`;
   document.getElementById('m-icon').innerHTML=IC[p.id]||'';
   document.getElementById('m-title').textContent=p.nombre;
@@ -410,7 +638,13 @@ function openModal(i){
   document.getElementById('m-footer-code').textContent=p.id+' \u00b7 Manufactura Confiter\u00eda \u00b7 2026';
   const checks=[{lbl:'App Requerida',v:p.req},{lbl:'App Disponible',v:p.disp},{lbl:'App Operativa',v:p.oper},{lbl:'Reporte',v:p.rep}];
   document.getElementById('m-checks').innerHTML=checks.map(c=>`<div class="mchk-item ${c.v?'yes':'no'}"><div class="mchk-icon ${c.v?'yes':'no'}">${c.v?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B0A8EE" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><span class="mchk-lbl">${c.lbl}</span></div>`).join('');
-  document.getElementById('m-detail').innerHTML=p.desc?`<div style="background:var(--bg);border-radius:12px;padding:16px 18px;font-size:12px;color:var(--ink3);line-height:1.7;border:1.5px solid var(--border)">${p.desc}</div>`:`<div class="detail-pend"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--ink4)" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><p>Documentaci\u00f3n en construcci\u00f3n.</p></div>`;
+  // build detail with extra meta
+  let extra='';
+  if(m.prioridad)extra+=`<div style="margin-bottom:10px;display:flex;align-items:center;gap:8px"><span style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em">Prioridad:</span><span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;${m.prioridad==='Alta'?'background:var(--red-bg);color:var(--red)':m.prioridad==='Media'?'background:var(--amber-bg);color:var(--amber)':'background:var(--green-bg);color:var(--green)'}">${m.prioridad}</span></div>`;
+  if(m.impactos.length)extra+=`<div style="margin-bottom:10px"><div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Impactos esperados</div><div style="display:flex;flex-wrap:wrap;gap:5px">${m.impactos.map(x=>`<span class="chip">${x}</span>`).join('')}</div></div>`;
+  if(m.indicadores.length)extra+=`<div style="margin-bottom:10px"><div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Indicadores clave</div><div style="display:flex;flex-wrap:wrap;gap:5px">${m.indicadores.map(x=>`<span class="chip">${x}</span>`).join('')}</div></div>`;
+  if(m.tareas.length){const tp=taskProgress(m.tareas);extra+=`<div><div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Actividades — ${tp.done}/${tp.t} completadas (${tp.pct}%)</div>${m.tareas.map((t,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)"><span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--ink4);width:22px;flex-shrink:0">${String(i+1).padStart(2,'0')}</span><span style="flex:1;font-size:11.5px;color:var(--ink)">${t.nombre||'Sin nombre'}</span><span style="font-size:10px;color:var(--ink3);margin-right:8px">${t.responsable}</span><span class="${taskStatusClass(t.estado)}">${t.estado}</span></div>`).join('')}</div>`;}
+  document.getElementById('m-detail').innerHTML=`<div style="background:var(--bg);border-radius:12px;padding:16px 18px;font-size:12px;color:var(--ink3);line-height:1.7;border:1.5px solid var(--border);margin-bottom:12px">${p.desc||'Sin descripción.'}</div>${extra?`<div style="margin-top:10px">${extra}</div>`:''}`;
   const lnk=document.getElementById('m-link');
   if(p.link){lnk.href=p.link;lnk.className='btn-ver';lnk.innerHTML=`${p.llbl||'Ver tablero'} <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;}
   else{lnk.href='#';lnk.className='btn-ver disabled';lnk.textContent='Sin archivo a\u00fan';}
@@ -418,8 +652,14 @@ function openModal(i){
 }
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open')}
 function closeIfBg(e){if(e.target===document.getElementById('modal-overlay'))closeModal()}
+
+/* ── UTILS ── */
+function showBadge(id){const b=document.getElementById(id);if(b){b.classList.add('show');setTimeout(()=>b.classList.remove('show'),2200);}}
+
+/* ── INIT ── */
 document.getElementById('fecha').textContent=new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});
-loadAll();renderCards();
+loadAll();
+renderCards();
 </script>
 </body>
 </html>
