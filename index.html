@@ -314,12 +314,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <!-- PORTAL -->
 <div class="view active" id="view-portal">
 <div class="portal-wrap">
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-lbl">Total proyectos</div><div class="stat-val" style="color:var(--purple)" id="stat-total">0</div><div class="stat-sub">En este portal</div></div>
-    <div class="stat-card"><div class="stat-lbl">✅ Funcional</div><div class="stat-val" style="color:var(--green)" id="stat-live">0</div><div class="stat-sub">En producción</div></div>
-    <div class="stat-card"><div class="stat-lbl">🔧 Desarrollo</div><div class="stat-val" style="color:var(--amber)" id="stat-dev">0</div><div class="stat-sub">En progreso</div></div>
-    <div class="stat-card"><div class="stat-lbl">⏳ Pendiente</div><div class="stat-val" style="color:var(--ink4)" id="stat-pend">0</div><div class="stat-sub">Por iniciar</div></div>
-  </div>
   <div class="search-bar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C0C2D0" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="search-input" placeholder="Buscar proyecto por nombre, código o responsable…" oninput="filterCards()"></div>
   <div class="section-label">Proyectos disponibles<button class="vis-btn" onclick="openVisPanel()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Gestionar visibilidad</button></div>
   <div class="grid" id="card-grid"></div>
