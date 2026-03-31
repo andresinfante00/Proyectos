@@ -160,6 +160,33 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .btn-ver.disabled{background:var(--bg);color:var(--ink4);border:1px solid var(--border);cursor:default;pointer-events:none}
 .btn-close-modal{background:var(--bg);color:var(--ink3);border:1.5px solid var(--border);border-radius:10px;padding:10px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
 .btn-close-modal:hover{border-color:var(--ink4);color:var(--ink)}
+/* VISIBILITY MANAGER */
+.vis-btn{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;color:var(--ink3);cursor:pointer;font-family:inherit;transition:all .15s;margin-left:auto}
+.vis-btn:hover{border-color:var(--purple-b);color:var(--purple);background:var(--purple-bg)}
+.vis-panel-overlay{position:fixed;inset:0;background:rgba(15,17,23,.45);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:flex-start;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
+.vis-panel-overlay.open{opacity:1;pointer-events:all}
+.vis-panel{background:var(--card);width:360px;height:100vh;overflow-y:auto;box-shadow:-12px 0 40px rgba(0,0,0,.15);transform:translateX(20px);transition:transform .25s;display:flex;flex-direction:column}
+.vis-panel-overlay.open .vis-panel{transform:translateX(0)}
+.vis-panel-head{padding:22px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--card);z-index:1}
+.vis-panel-title{font-size:15px;font-weight:800;color:var(--ink);letter-spacing:-.2px}
+.vis-panel-close{width:30px;height:30px;border-radius:8px;background:var(--bg);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink3)}
+.vis-panel-close:hover{background:var(--red-bg);color:var(--red);border-color:var(--red-b)}
+.vis-panel-body{padding:16px 22px;flex:1;display:flex;flex-direction:column;gap:8px}
+.vis-panel-sub{font-size:11px;color:var(--ink3);margin-bottom:6px;line-height:1.5}
+.vis-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:11px;border:1.5px solid var(--border);background:#FAFBFD;transition:all .15s;cursor:pointer;user-select:none}
+.vis-item.visible{border-color:var(--purple-b);background:var(--purple-bg)}
+.vis-item-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid}
+.vis-item-info{flex:1;min-width:0}
+.vis-item-name{font-size:12px;font-weight:700;color:var(--ink);line-height:1.3}
+.vis-item-id{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--ink3);margin-top:2px}
+.vis-toggle{width:36px;height:20px;border-radius:10px;background:var(--border);position:relative;transition:background .2s;flex-shrink:0}
+.vis-toggle::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:white;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.vis-item.visible .vis-toggle{background:var(--purple)}
+.vis-item.visible .vis-toggle::after{transform:translateX(16px)}
+.vis-panel-footer{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:8px;position:sticky;bottom:0;background:var(--card)}
+.vis-btn-all{flex:1;padding:10px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;border:1.5px solid var(--border);background:var(--bg);color:var(--ink3);transition:all .15s}
+.vis-btn-all:hover{border-color:var(--purple-b);color:var(--purple);background:var(--purple-bg)}
+.vis-btn-apply{flex:1;padding:10px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;border:none;background:var(--purple);color:white}
 </style>
 </head>
 <body>
@@ -200,7 +227,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C0C2D0" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <input type="text" id="search-input" placeholder="Buscar proyecto por nombre, código o responsable…" oninput="filterCards()">
   </div>
-  <div class="section-label">Proyectos disponibles</div>
+  <div class="section-label">Proyectos disponibles
+    <button class="vis-btn" onclick="openVisPanel()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Gestionar visibilidad
+    </button>
+  </div>
   <div class="grid" id="card-grid"></div>
   <div class="empty" id="empty-state">
     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#7A7D8F" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -267,8 +299,138 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
+<!-- VISIBILITY PANEL -->
+<div class="vis-panel-overlay" id="vis-overlay" onclick="closeVisPanelIfBg(event)">
+  <div class="vis-panel">
+    <div class="vis-panel-head">
+      <div class="vis-panel-title">Gestionar visibilidad</div>
+      <button class="vis-panel-close" onclick="closeVisPanel()">✕</button>
+    </div>
+    <div class="vis-panel-body">
+      <p class="vis-panel-sub">Selecciona qué proyectos aparecen en la vista Portal. Los ocultos siguen visibles en el Cuadro de Mando.</p>
+      <div id="vis-list"></div>
+    </div>
+    <div class="vis-panel-footer">
+      <button class="vis-btn-all" onclick="toggleAll()">Mostrar / Ocultar todos</button>
+      <button class="vis-btn-apply" onclick="closeVisPanel()">Aplicar</button>
+    </div>
+  </div>
+</div>
+
 <script>
+const VIS_KEY='pdi_portal_visibility_v1';
 const P=[
+  {id:'PDI-007',nombre:'Gestión de Novedades',sub:'Flujo gerencial · Talento Humano',desc:'Tablero de novedades pendientes por responsable: justificación de inasistencias y validación de horas adicionales por Centro, Planta y Línea. Incluye análisis de causas y tendencia semanal.',tags:['Talento Humano','Snowflake','Streamlit','Apps Script'],badge:'EN DEV',bbg:'var(--amber-bg)',bc:'var(--amber)',bbd:'var(--amber-b)',ibg:'var(--purple-bg)',ibd:'var(--purple-b)',sdot:'dot-dev',slbl:'En desarrollo',sc:'var(--amber)',link:'flujo_novedades_3col_1.html',llbl:'Ver tablero',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:80,ejecutor:'Andres Infante',req:true,disp:true,oper:true,rep:true},
+  {id:'PDI-008',nombre:'Notificaciones por Plantilla',sub:'Envío automatizado de comunicaciones',desc:'Sistema de notificaciones basado en plantillas para automatizar comunicaciones a colaboradores según eventos del flujo de producción.',tags:['Por definir'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--teal-bg)',ibd:'var(--teal-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:'pdi_008_notificaciones_plantilla.html',llbl:'Ver proyecto',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:0,ejecutor:'Por definir',req:false,disp:false,oper:false,rep:false},
+  {id:'PDI-009',nombre:'Portal de Reportes',sub:'Indicadores y visualización de datos',desc:'Portal centralizado de reportes e indicadores para el área de manufactura.',tags:['Por definir'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--blue-bg)',ibd:'var(--blue-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:0,ejecutor:'Por definir',req:false,disp:false,oper:false,rep:false},
+  {id:'PDI-001',nombre:'Solución PNC',sub:'Producto No Conforme',desc:'Solución integral para la gestión del producto no conforme en planta.',tags:['Calidad','Manufactura'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--red-bg)',ibd:'var(--red-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:100,ejecutor:'Sebastian Giraldo',req:true,disp:true,oper:true,rep:true},
+  {id:'PDI-002',nombre:'Gestión Colaboradores',sub:'Kg/hora — Fase 2',desc:'Dashboard de productividad por colaborador medida en Kg/hora. Segunda fase del proyecto.',tags:['Talento Humano','KPIs'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--green-bg)',ibd:'var(--green-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:80,ejecutor:'Sebastian Giraldo',req:true,disp:true,oper:true,rep:true},
+  {id:'PDI-003',nombre:'Dashboard — Ranking de KPIs',sub:'Indicadores clave de desempeño',desc:'Dashboard de ranking de indicadores clave de desempeño para el área de manufactura.',tags:['Dashboard','KPIs'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--amber-bg)',ibd:'var(--amber-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:80,ejecutor:'Carlos Grajales',req:false,disp:true,oper:true,rep:true},
+  {id:'PDI-004',nombre:'Herramienta de Programación',sub:'Planificación de producción',desc:'Herramienta digital para la programación de turnos y producción en planta.',tags:['Producción'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--purple-bg)',ibd:'var(--purple-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:60,ejecutor:'Andres Infante',req:true,disp:true,oper:true,rep:false},
+  {id:'PDI-005',nombre:'Registros de Notificación',sub:'Automatización y trazabilidad',desc:'Sistema de registro y trazabilidad de notificaciones internas del proceso productivo.',tags:['Automatización'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--indigo-bg)',ibd:'var(--indigo-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:95,ejecutor:'Sebastian Giraldo',req:true,disp:true,oper:true,rep:false},
+  {id:'PDI-006',nombre:'Bitácora Digital Bianchi',sub:'Registro digital de operaciones',desc:'Bitácora digital para el registro de operaciones en la planta Bianchi.',tags:['Bianchi','Operaciones'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--rose-bg)',ibd:'var(--rose-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:95,ejecutor:'Sebastian Giraldo',req:true,disp:true,oper:true,rep:true},
+];
+const IC={'PDI-007':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>','PDI-008':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A7B65" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>','PDI-009':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A6DB5" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>','PDI-001':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>','PDI-002':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D9F6E" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>','PDI-003':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C07314" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>','PDI-004':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B4FD4" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>','PDI-005':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3730A3" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>','PDI-006':'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B5265A" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>'};
+
+/* VISIBILITY STATE */
+let visState={};
+function loadVis(){try{const s=localStorage.getItem(VIS_KEY);visState=s?JSON.parse(s):{};P.forEach(p=>{if(visState[p.id]===undefined)visState[p.id]=true;});}catch(e){P.forEach(p=>visState[p.id]=true);}}
+function saveVis(){try{localStorage.setItem(VIS_KEY,JSON.stringify(visState));}catch(e){}}
+function isVisible(id){return visState[id]!==false;}
+
+function pc(a){return a>=100?'#0D9F6E':a>=70?'#1A6DB5':a>=30?'#C07314':'#C0392B'}
+function stA(a){return a>=100?{c:'sb-done',l:'Completado'}:a>=70?{c:'sb-prog',l:'En progreso'}:a>=30?{c:'sb-warn',l:'En riesgo'}:{c:'sb-pend',l:'Iniciado'}}
+
+function renderCards(){
+  const visible=P.filter((_,i)=>isVisible(P[i].id));
+  document.getElementById('card-grid').innerHTML=P.map((p,i)=>{
+    if(!isVisible(p.id))return'';
+    const col=pc(p.avance);
+    const pr=p.avance>0?`<div class="card-prog"><div class="card-prog-row"><span class="card-prog-label">Avance</span><span class="card-prog-val" style="color:${col}">${p.avance}%</span></div><div class="card-prog-bar"><div class="card-prog-fill" style="width:${p.avance}%;background:${col}"></div></div></div>`:'';
+    const qp=p.q?`<span class="cf-q q-${p.q}">${p.q}</span>`:'';
+    return `<div class="project-card" onclick="openModal(${i})" data-tags="${p.id.toLowerCase()} ${p.nombre.toLowerCase()} ${p.ejecutor.toLowerCase()}"><div class="card-top"><div class="card-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div><div class="card-info"><div class="card-title">${p.nombre}</div><div class="card-sub">${p.sub}</div></div><div class="card-badge" style="background:${p.bbg};color:${p.bc};border-color:${p.bbd}">${p.badge}</div></div><div class="card-body"><div class="card-desc">${p.desc}</div>${pr}<div class="card-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<span class="tag">${p.id}</span></div></div><div class="card-footer"><div class="cf-status"><div class="status-dot ${p.sdot}"></div><span style="color:${p.sc}">${p.slbl}</span>${qp}</div><span class="cf-link">Ver detalle <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></div></div>`;
+  }).join('');
+  updateStats();
+}
+
+/* VIS PANEL */
+function openVisPanel(){
+  const list=document.getElementById('vis-list');
+  list.innerHTML=P.map(p=>`
+    <div class="vis-item ${isVisible(p.id)?'visible':''}" onclick="toggleVis('${p.id}')" id="vis-item-${p.id}">
+      <div class="vis-item-icon" style="background:${p.ibg};border-color:${p.ibd}">${IC[p.id]||''}</div>
+      <div class="vis-item-info">
+        <div class="vis-item-name">${p.nombre}</div>
+        <div class="vis-item-id">${p.id}</div>
+      </div>
+      <div class="vis-toggle" id="vis-tog-${p.id}"></div>
+    </div>`).join('');
+  document.getElementById('vis-overlay').classList.add('open');
+}
+function closeVisPanel(){document.getElementById('vis-overlay').classList.remove('open');renderCards();}
+function closeVisPanelIfBg(e){if(e.target===document.getElementById('vis-overlay'))closeVisPanel();}
+function toggleVis(id){
+  visState[id]=!visState[id];
+  saveVis();
+  const item=document.getElementById('vis-item-'+id);
+  const tog=document.getElementById('vis-tog-'+id);
+  if(item)item.classList.toggle('visible',visState[id]);
+}
+function toggleAll(){
+  const allOn=P.every(p=>isVisible(p.id));
+  P.forEach(p=>{visState[p.id]=!allOn;saveVis();const item=document.getElementById('vis-item-'+p.id);if(item)item.classList.toggle('visible',visState[p.id]);});
+}
+
+function setView(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.getElementById('btn-portal').classList.toggle('active',v==='portal');document.getElementById('btn-mando').classList.toggle('active',v==='mando');if(v==='mando')renderMando('Q1');}
+const QC={Q1:{m:'#0D9F6E',bg:'rgba(13,159,110,.1)',bd:'rgba(13,159,110,.25)'},Q2:{m:'#1A6DB5',bg:'rgba(26,109,181,.1)',bd:'rgba(26,109,181,.25)'},Q3:{m:'#C07314',bg:'rgba(192,115,20,.1)',bd:'rgba(192,115,20,.25)'},Q4:{m:'#5B4FD4',bg:'rgba(91,79,212,.1)',bd:'rgba(91,79,212,.25)'}};
+function setQ(q){document.querySelectorAll('.ttab').forEach(t=>t.classList.toggle('active',t.dataset.q===q));renderMando(q);}
+function renderMando(q){
+  const qp=P.filter(p=>p.q===q),col=QC[q];
+  const total=qp.length,done=qp.filter(p=>p.avance>=100).length,prog=qp.filter(p=>p.avance>=70&&p.avance<100).length,risk=qp.filter(p=>p.avance>0&&p.avance<70).length,repOk=qp.filter(p=>p.rep).length,operOk=qp.filter(p=>p.oper).length;
+  const pct=total?Math.round(done/total*100):0,avg=total?Math.round(qp.reduce((s,p)=>s+p.avance,0)/total):0;
+  const b=document.getElementById('cum-banner');b.style.cssText=`background:${col.bg};border-color:${col.bd}`;
+  b.innerHTML=`<div><div class="cum-pct" style="color:${col.m}">${pct}%</div><div class="cum-label" style="color:${col.m}">Cumplimiento ${q}</div><div class="cum-sub" style="color:${col.m}">${done} de ${total} proyectos completados</div></div><div class="cum-bar-wrap"><div class="cum-bar-label" style="color:${col.m}">Avance promedio: ${avg}%</div><div class="cum-bar" style="background:${col.bd}"><div class="cum-bar-fill" style="width:${avg}%;background:${col.m}"></div></div></div><div class="cum-total"><div class="cum-total-lbl" style="color:${col.m}">Total proyectos</div><div class="cum-total-val" style="color:${col.m}">${total}</div></div>`;
+  const kpis=[{l:'Inscritos',v:total,s:'En el trimestre',c:col.m,p:100},{l:'Completados',v:done,s:'Avance = 100%',c:'#0D9F6E',p:total?done/total*100:0},{l:'En progreso',v:prog,s:'Avance \u2265 70%',c:'#1A6DB5',p:total?prog/total*100:0},{l:'En riesgo',v:risk,s:'Avance < 70%',c:'#C07314',p:total?risk/total*100:0},{l:'Con reporte',v:repOk,s:`de ${total} proyectos`,c:'#5B4FD4',p:total?repOk/total*100:0},{l:'Apps operativas',v:operOk,s:`de ${total} proyectos`,c:'#0A7B65',p:total?operOk/total*100:0}];
+  document.getElementById('kpi-grid').innerHTML=kpis.map(k=>`<div class="kpi"><div class="kpi-lbl">${k.l}</div><div class="kpi-val" style="color:${k.c}">${k.v}</div><div class="kpi-sub">${k.s}</div><div class="kpi-bar"><div class="kpi-bar-fill" style="width:${k.p}%;background:${k.c}"></div></div></div>`).join('');
+  document.getElementById('mando-table-title').textContent=`Proyectos ${q} \u00b7 2026`;
+  document.getElementById('mando-table-meta').textContent=`${total} proyectos \u00b7 Corte ${new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'})}`;
+  if(!total){document.getElementById('mando-table-body').innerHTML=`<div style="text-align:center;padding:50px;color:var(--ink3)">Sin proyectos en ${q}</div>`;return;}
+  const chk=v=>v?`<div class="chk chk-yes"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></div>`:`<div class="chk chk-no"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>`;
+  document.getElementById('mando-table-body').innerHTML=`<table class="mando-table"><thead><tr><th>C\u00f3digo</th><th>Proyecto</th><th>Inicio</th><th>Fin</th><th style="min-width:140px">Avance</th><th style="text-align:center">App Req.</th><th style="text-align:center">App Disp.</th><th style="text-align:center">App Oper.</th><th style="text-align:center">Reporte</th><th>Estado</th></tr></thead><tbody>${qp.map(p=>{const gi=P.indexOf(p),col=pc(p.avance),st=stA(p.avance);return`<tr onclick="openModal(${gi})"><td><span class="proj-id-badge">${p.id}</span></td><td><div class="proj-name-cell">${p.nombre}</div><div class="proj-exec-cell">${p.ejecutor}</div></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px">${p.inicio}</td><td style="font-family:'JetBrains Mono',monospace;font-size:11px">${p.fin}</td><td><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${p.avance}%;background:${col}"></div></div><span class="prog-pct" style="color:${col}">${p.avance}%</span></div></td><td style="text-align:center">${chk(p.req)}</td><td style="text-align:center">${chk(p.disp)}</td><td style="text-align:center">${chk(p.oper)}</td><td style="text-align:center">${chk(p.rep)}</td><td><span class="sb ${st.c}">${st.l}</span></td></tr>`}).join('')}</tbody></table>`;
+}
+function openModal(i){
+  const p=P[i],col=pc(p.avance);
+  document.getElementById('m-icon').style.cssText=`background:${p.ibg};border-color:${p.ibd}`;
+  document.getElementById('m-icon').innerHTML=IC[p.id]||'';
+  document.getElementById('m-title').textContent=p.nombre;
+  document.getElementById('m-sub').textContent=p.sub;
+  document.getElementById('m-id').textContent=p.id;
+  document.getElementById('m-q').innerHTML=p.q?`<span class="cf-q q-${p.q}">${p.q}</span>`:'—';
+  document.getElementById('m-start').textContent=p.inicio||'—';
+  document.getElementById('m-end').textContent=p.fin||'—';
+  document.getElementById('m-exec').textContent=p.ejecutor||'—';
+  document.getElementById('m-pct').textContent=p.avance+'%';
+  document.getElementById('m-pct').style.color=col;
+  document.getElementById('m-prog-fill').style.cssText=`width:${p.avance}%;background:${col}`;
+  document.getElementById('m-footer-code').textContent=p.id+' \u00b7 Manufactura Confiter\u00eda \u00b7 2026';
+  const checks=[{lbl:'App Requerida',v:p.req},{lbl:'App Disponible',v:p.disp},{lbl:'App Operativa',v:p.oper},{lbl:'Reporte',v:p.rep}];
+  document.getElementById('m-checks').innerHTML=checks.map(c=>`<div class="mchk-item ${c.v?'yes':'no'}"><div class="mchk-icon ${c.v?'yes':'no'}">${c.v?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B0A8EE" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><span class="mchk-lbl">${c.lbl}</span></div>`).join('');
+  document.getElementById('m-detail').innerHTML=p.desc?`<div style="background:var(--bg);border-radius:12px;padding:16px 18px;font-size:12px;color:var(--ink3);line-height:1.7;border:1.5px solid var(--border)">${p.desc}</div>`:`<div class="detail-pend"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--ink4)" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><p>Documentaci\u00f3n en construcci\u00f3n.</p></div>`;
+  const lnk=document.getElementById('m-link');
+  if(p.link){lnk.href=p.link;lnk.className='btn-ver';lnk.innerHTML=`${p.llbl||'Ver tablero'} <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;}
+  else{lnk.href='#';lnk.className='btn-ver disabled';lnk.textContent='Sin archivo a\u00fan';}
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open')}
+function closeIfBg(e){if(e.target===document.getElementById('modal-overlay'))closeModal()}
+function filterCards(){const q=document.getElementById('search-input').value.toLowerCase().trim();const cards=document.querySelectorAll('.project-card');let v=0;cards.forEach(c=>{const show=!q||(c.textContent+(c.dataset.tags||'')).toLowerCase().includes(q);c.style.display=show?'':'none';if(show)v++;});document.getElementById('empty-state').style.display=v===0?'flex':'none';}
+function updateStats(){const cards=document.querySelectorAll('.project-card');let live=0,dev=0,pend=0;cards.forEach(c=>{const t=(c.querySelector('.card-badge')||{}).textContent||'';if(t==='LIVE')live++;else if(t==='EN DEV')dev++;else pend++;});document.getElementById('stat-total').textContent=cards.length;document.getElementById('stat-live').textContent=live;document.getElementById('stat-dev').textContent=dev;document.getElementById('stat-pend').textContent=pend;}
+document.getElementById('fecha').textContent=new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});
+loadVis();
+renderCards();
+</script>
+</body>
+</html>
   {id:'PDI-007',nombre:'Gestión de Novedades',sub:'Flujo gerencial · Talento Humano',desc:'Tablero de novedades pendientes por responsable: justificación de inasistencias y validación de horas adicionales por Centro, Planta y Línea. Incluye análisis de causas y tendencia semanal.',tags:['Talento Humano','Snowflake','Streamlit','Apps Script'],badge:'EN DEV',bbg:'var(--amber-bg)',bc:'var(--amber)',bbd:'var(--amber-b)',ibg:'var(--purple-bg)',ibd:'var(--purple-b)',sdot:'dot-dev',slbl:'En desarrollo',sc:'var(--amber)',link:'flujo_novedades_3col_1.html',llbl:'Ver tablero',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:80,ejecutor:'Andres Infante',req:true,disp:true,oper:true,rep:true},
   {id:'PDI-008',nombre:'Notificaciones por Plantilla',sub:'Envío automatizado de comunicaciones',desc:'Sistema de notificaciones basado en plantillas para automatizar comunicaciones a colaboradores según eventos del flujo de producción.',tags:['Por definir'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--teal-bg)',ibd:'var(--teal-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:'pdi_008_notificaciones_plantilla.html',llbl:'Ver proyecto',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:0,ejecutor:'Por definir',req:false,disp:false,oper:false,rep:false},
   {id:'PDI-009',nombre:'Portal de Reportes',sub:'Indicadores y visualización de datos',desc:'Portal centralizado de reportes e indicadores para el área de manufactura.',tags:['Por definir'],badge:'PENDIENTE',bbg:'#F4F5FA',bc:'#7A7D8F',bbd:'#D0D2E0',ibg:'var(--blue-bg)',ibd:'var(--blue-b)',sdot:'dot-pend',slbl:'Pendiente',sc:'var(--ink4)',link:null,llbl:'Sin archivo',q:'Q1',inicio:'01/01/2026',fin:'31/03/2026',avance:0,ejecutor:'Por definir',req:false,disp:false,oper:false,rep:false},
