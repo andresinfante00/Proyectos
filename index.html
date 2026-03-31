@@ -489,12 +489,26 @@ function renderEditPanel(){
     <!-- INFO GENERAL -->
     <div class="edit-card">
       <div class="edit-card-head">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:36px;height:36px;border-radius:9px;background:${p.ibg};border:1.5px solid ${p.ibd};display:flex;align-items:center;justify-content:center">${IC_SM[p.id]||''}</div>
-          <div><div class="edit-card-title">${p.nombre}</div><div style="font-size:10px;color:var(--ink3);font-family:'JetBrains Mono',monospace;margin-top:2px">${p.id}</div></div>
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div style="width:36px;height:36px;border-radius:9px;background:${p.ibg};border:1.5px solid ${p.ibd};display:flex;align-items:center;justify-content:center;flex-shrink:0">${IC_SM[p.id]||''}</div>
+          <div style="flex:1;min-width:0"><div class="edit-card-title">${p.nombre}</div><div style="font-size:10px;color:var(--ink3);font-family:'JetBrains Mono',monospace;margin-top:2px">${p.id}</div></div>
+          <button onclick="deleteProject(${editingIdx})" style="display:flex;align-items:center;gap:5px;background:var(--red-bg);color:var(--red);border:1.5px solid var(--red-b);border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;transition:all .15s" onmouseover="this.style.background='var(--red)';this.style.color='white'" onmouseout="this.style.background='var(--red-bg)';this.style.color='var(--red)'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Eliminar proyecto
+          </button>
         </div>
       </div>
       <div class="edit-card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre del proyecto</label>
+            <input class="form-input" id="ep-nombre" value="${p.nombre||''}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subtítulo / Área</label>
+            <input class="form-input" id="ep-sub" value="${p.sub||''}">
+          </div>
+        </div>
         <div class="form-row full">
           <div class="form-group">
             <label class="form-label">Descripción del proyecto</label>
@@ -623,6 +637,8 @@ function saveProject(){
   const m=getMeta(p.id);
   const descEl=document.getElementById('ep-desc');
   const execEl=document.getElementById('ep-exec');
+  const nomEl=document.getElementById('ep-nombre');if(nomEl&&nomEl.value.trim())p.nombre=nomEl.value.trim();
+  const subEl=document.getElementById('ep-sub');if(subEl)p.sub=subEl.value;
   if(descEl)p.desc=descEl.value;
   if(execEl)p.ejecutor=execEl.value;
   const laEl=document.getElementById('ep-link-app');if(laEl)getMeta(p.id).link_app=laEl.value;
@@ -633,6 +649,19 @@ function saveProject(){
   const btn=document.getElementById('btn-save-proj');
   if(btn){btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>\u2713 Guardado';btn.classList.add('saved');setTimeout(()=>{btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar proyecto';btn.classList.remove('saved');},2000);}
   showBadge('editar-saved');
+  renderCards();
+}
+
+/* ── DELETE PROJECT ── */
+function deleteProject(i){
+  const p=P[i];
+  if(!confirm('¿Eliminar "'+p.nombre+'" ('+p.id+') del portal?\nEsta acción no se puede deshacer.'))return;
+  P.splice(i,1);
+  delete metaState[p.id];
+  delete visState[p.id];
+  saveMeta();saveVis();saveAvance();
+  editingIdx=Math.min(editingIdx,P.length-1);
+  renderEditar();
   renderCards();
 }
 
