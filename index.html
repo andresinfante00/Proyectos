@@ -1840,6 +1840,356 @@ input[type="range"]::-webkit-slider-thumb {
 
 .align-summary-stat strong { color: var(--text-2); }
 
+/* ================================================================
+   CUADRO DE MANDO
+================================================================ */
+.cuadro-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  font-size: 13px;
+}
+
+.cuadro-table thead tr {
+  background: var(--bg-subtle);
+}
+
+.cuadro-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.cuadro-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.cuadro-table tbody tr:last-child td { border-bottom: none; }
+
+.cuadro-table tbody tr:hover td { background: var(--bg-subtle); }
+
+.cuadro-table tbody tr.row-cancelado td {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+/* Semaphore */
+.semaforo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.semaforo-verde   { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+.semaforo-amarillo{ background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.semaforo-rojo    { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+.semaforo-gris    { background: var(--bg-subtle); color: var(--text-3); border: 1px solid var(--border); }
+
+.semaforo-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-verde   { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.dot-amarillo{ background: var(--orange); box-shadow: 0 0 6px var(--orange); }
+.dot-rojo    { background: var(--red); box-shadow: 0 0 6px var(--red); }
+.dot-gris    { background: var(--text-3); }
+
+/* Progress mini bar */
+.mini-prog-wrap { display: flex; align-items: center; gap: 8px; }
+.mini-prog-track { flex: 1; height: 5px; background: var(--bg-muted); border-radius: 10px; overflow: hidden; min-width: 60px; }
+.mini-prog-fill  { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--accent), #6b9ef8); }
+.mini-prog-label { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent); min-width: 32px; text-align: right; }
+
+/* Cumplimiento badge */
+.cumpl-badge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.cumpl-alto  { background: var(--green-bg);  color: var(--green); }
+.cumpl-medio { background: var(--orange-bg); color: var(--orange); }
+.cumpl-bajo  { background: var(--red-bg);    color: var(--red); }
+.cumpl-none  { color: var(--text-3); font-weight: 400; font-style: italic; }
+
+/* Action buttons in table */
+.table-actions { display: flex; gap: 4px; }
+
+/* Project mgmt modal */
+.mgmt-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.mgmt-option {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mgmt-option:hover { border-color: var(--border-dark); background: var(--bg-subtle); }
+.mgmt-option.selected { border-color: var(--accent); background: var(--accent-light); }
+.mgmt-option.selected.danger { border-color: var(--red); background: var(--red-bg); }
+
+.mgmt-option-icon { font-size: 22px; flex-shrink: 0; }
+.mgmt-option-name { font-size: 13px; font-weight: 700; }
+.mgmt-option-desc { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+.trimestre-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+  display: none;
+}
+
+.trimestre-options.open { display: grid; }
+
+.trim-opt {
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  transition: all 0.15s;
+  background: var(--bg-card);
+}
+
+.trim-opt:hover   { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.trim-opt.selected{ background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Checkbox in portal cards */
+.card-select-check {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border-dark);
+  background: var(--bg-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: all 0.15s;
+  z-index: 5;
+}
+
+.card-select-check.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.project-card { position: relative; }
+
+.selection-toolbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  z-index: 150;
+  transition: transform 0.3s;
+  white-space: nowrap;
+}
+
+.selection-toolbar.open {
+  transform: translateX(-50%) translateY(0);
+}
+
+.sel-toolbar-count {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sel-toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.2);
+}
+
+/* ================================================================
+   CONTROL DE ALCANCE
+================================================================ */
+
+/* Scope badge on activity */
+.alcance-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+
+.alcance-baseline { background: var(--bg-muted);   color: var(--text-3); }
+.alcance-ampliado { background: #fef9c3;            color: #854d0e;       border: 1px solid #fde047; }
+
+/* Trimestre group in activities */
+.trimestre-group { margin-bottom: 20px; }
+
+.trimestre-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+
+.trimestre-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trimestre-group-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.trimestre-closed-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.trimestre-closed-100 { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.trimestre-closed-part{ background: var(--orange-bg);color: var(--orange);border: 1px solid var(--orange-border); }
+.trimestre-open       { background: var(--blue-bg);  color: var(--blue-text); border: 1px solid var(--blue-border); }
+
+/* Scope alert banner */
+.scope-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fefce8;
+  border: 1px solid #fde047;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.scope-alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.scope-alert-text { flex: 1; color: #713f12; }
+.scope-alert-title { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
+
+/* Scope change history */
+.scope-history-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.scope-history-date { color: var(--text-3); white-space: nowrap; min-width: 80px; }
+.scope-history-desc { flex: 1; color: var(--text-2); line-height: 1.5; }
+.scope-history-badge{ flex-shrink: 0; }
+
+/* Global progress bar with baseline vs ampliado */
+.dual-progress-track {
+  height: 8px;
+  background: var(--bg-muted);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+}
+
+.dual-progress-baseline {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #6b9ef8);
+  transition: width 0.4s;
+}
+
+.dual-progress-ampliado {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  transition: width 0.4s;
+}
+
+/* Scope change modal specific */
+.scope-trimestre-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.scope-trim-opt {
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  transition: all 0.15s;
+  background: var(--bg-card);
+}
+
+.scope-trim-opt:hover    { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.scope-trim-opt.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+
 /* TOAST */
 .toast {
   position: fixed;
@@ -1952,10 +2302,42 @@ input[type="range"]::-webkit-slider-thumb {
     <div class="page-header">
       <div>
         <div class="page-title">Cuadro de Mando</div>
-        <div class="page-subtitle">Todos los proyectos del período</div>
+        <div class="page-subtitle" id="cuadroSubtitle">Vista ejecutiva · Estado de proyectos y cumplimiento semanal</div>
       </div>
-      <button class="btn btn-secondary btn-sm" onclick="loadAll()">↻ Actualizar</button>
+      <div class="page-actions">
+        <button class="btn btn-secondary btn-sm" onclick="renderCuadro()">↻ Actualizar</button>
+      </div>
     </div>
+
+    <!-- KPIs ejecutivos -->
+    <div class="stats-row" id="cuadroKpis">
+      <div class="stat-card">
+        <div class="stat-value" id="kpi-total">—</div>
+        <div class="stat-label">Proyectos activos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--green)" id="kpi-verde">—</div>
+        <div class="stat-label">🟢 En tiempo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--orange)" id="kpi-amarillo">—</div>
+        <div class="stat-label">🟡 En riesgo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--red)" id="kpi-rojo">—</div>
+        <div class="stat-label">🔴 Crítico</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="kpi-cumplimiento">—</div>
+        <div class="stat-label">Cumpl. semanal prom.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="kpi-avance">—</div>
+        <div class="stat-label">Avance global prom.</div>
+      </div>
+    </div>
+
+    <!-- Tabla ejecutiva -->
     <div id="cuadroContent">
       <div class="loading-state"><div class="spinner"></div></div>
     </div>
@@ -2232,7 +2614,68 @@ input[type="range"]::-webkit-slider-thumb {
 </div>
 
 <!-- ============================================================
-     MODAL: ACTIVITY FORM
+     MODAL: CAMBIO DE ALCANCE
+============================================================ -->
+<div class="modal-overlay" id="overlayScope" onclick="if(event.target===this) closeScopeModal()">
+  <div class="modal-form" style="max-width:520px">
+    <div class="modal-form-header">
+      <div class="modal-form-title">📐 Ampliar Alcance del Proyecto</div>
+      <button class="modal-close" onclick="closeScopeModal()">✕</button>
+    </div>
+
+    <div class="scope-alert" style="margin-bottom:16px">
+      <div class="scope-alert-icon">ℹ️</div>
+      <div class="scope-alert-text">
+        <div class="scope-alert-title">¿Qué hace esto?</div>
+        Registra formalmente que el alcance del proyecto se amplió. Las actividades nuevas
+        que agregues serán marcadas como <strong>"Ampliado"</strong> y se medirán por separado
+        del alcance original, permitiendo ver el avance de cada trimestre de forma independiente.
+      </div>
+    </div>
+
+    <div class="form-grid" style="gap:12px">
+      <div class="form-group full">
+        <label class="form-label">¿Por qué se amplía el alcance? *</label>
+        <textarea id="scope-desc" class="form-textarea" rows="3"
+          placeholder="Ej: Se identificaron nuevos módulos requeridos por el área de TH para completar el flujo de vacaciones..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Trimestre origen (donde estaba)</label>
+        <select id="scope-origen" class="form-select">
+          <option value="Q1 · Ene–Mar 2026">Q1 · Ene–Mar 2026</option>
+          <option value="Q2 · Abr–Jun 2026">Q2 · Abr–Jun 2026</option>
+          <option value="Q3 · Jul–Sep 2026">Q3 · Jul–Sep 2026</option>
+          <option value="Q4 · Oct–Dic 2026">Q4 · Oct–Dic 2026</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Trimestre destino (actividades nuevas)</label>
+        <select id="scope-destino" class="form-select">
+          <option value="Q1 · Ene–Mar 2026">Q1 · Ene–Mar 2026</option>
+          <option value="Q2 · Abr–Jun 2026" selected>Q2 · Abr–Jun 2026</option>
+          <option value="Q3 · Jul–Sep 2026">Q3 · Jul–Sep 2026</option>
+          <option value="Q4 · Oct–Dic 2026">Q4 · Oct–Dic 2026</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Registrado por</label>
+        <input type="text" id="scope-quien" class="form-input" placeholder="Nombre" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fecha del cambio</label>
+        <input type="date" id="scope-fecha" class="form-input" />
+      </div>
+    </div>
+
+    <div class="form-actions" style="margin-top:20px">
+      <button class="btn btn-primary" id="btnSaveScope" onclick="saveScopeChange()">Registrar cambio de alcance</button>
+      <button class="btn btn-secondary" onclick="closeScopeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: ACTIVITY FORM (updated with alcance)
 ============================================================ -->
 <div class="modal-overlay" id="overlayActivity" onclick="if(event.target===this) closeActivityModal()">
   <div class="modal-form">
@@ -2258,7 +2701,7 @@ input[type="range"]::-webkit-slider-thumb {
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Período</label>
+        <label class="form-label">Trimestre / Período</label>
         <select id="act-periodo" class="form-select">
           <option value="Q1 · 2026">Q1 · 2026</option>
           <option value="Ene 2026">Ene 2026</option>
@@ -2270,6 +2713,13 @@ input[type="range"]::-webkit-slider-thumb {
           <option value="Jun 2026">Jun 2026</option>
           <option value="Q3 · 2026">Q3 · 2026</option>
           <option value="Q4 · 2026">Q4 · 2026</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Alcance</label>
+        <select id="act-alcance" class="form-select">
+          <option value="baseline">Baseline (alcance original)</option>
+          <option value="ampliado">Ampliado (agregado después)</option>
         </select>
       </div>
       <div class="form-group">
@@ -2377,6 +2827,80 @@ input[type="range"]::-webkit-slider-thumb {
       <button class="btn btn-secondary" onclick="closeTipoModal()">Cancelar</button>
     </div>
   </div>
+</div>
+
+<!-- ============================================================
+     MODAL: GESTIÓN DE PROYECTO (cancelar / cambiar trimestre)
+============================================================ -->
+<div class="modal-overlay" id="overlayMgmt" onclick="if(event.target===this) closeMgmtModal()">
+  <div class="modal-form" style="max-width:480px">
+    <div class="modal-form-header">
+      <div class="modal-form-title">Gestionar proyectos seleccionados</div>
+      <button class="modal-close" onclick="closeMgmtModal()">✕</button>
+    </div>
+
+    <div style="font-size:13px;color:var(--text-3);margin-bottom:16px" id="mgmtProjectNames">—</div>
+
+    <div class="mgmt-options">
+      <div class="mgmt-option" id="mgmt-opt-trimestre" onclick="selectMgmtAction('trimestre')">
+        <div class="mgmt-option-icon">📅</div>
+        <div>
+          <div class="mgmt-option-name">Cambiar trimestre</div>
+          <div class="mgmt-option-desc">Mover el proyecto a otro período de ejecución</div>
+        </div>
+      </div>
+      <div class="mgmt-option" id="mgmt-opt-cancelar" onclick="selectMgmtAction('cancelar')">
+        <div class="mgmt-option-icon">🚫</div>
+        <div>
+          <div class="mgmt-option-name">Cancelar proyecto</div>
+          <div class="mgmt-option-desc">Marcar como cancelado y ocultar del portal</div>
+        </div>
+      </div>
+      <div class="mgmt-option" id="mgmt-opt-pausar" onclick="selectMgmtAction('pausar')">
+        <div class="mgmt-option-icon">⏸</div>
+        <div>
+          <div class="mgmt-option-name">Pausar proyecto</div>
+          <div class="mgmt-option-desc">Detener temporalmente sin cancelar</div>
+        </div>
+      </div>
+      <div class="mgmt-option" id="mgmt-opt-ocultar" onclick="selectMgmtAction('ocultar')">
+        <div class="mgmt-option-icon">👁</div>
+        <div>
+          <div class="mgmt-option-name">Ocultar del portal</div>
+          <div class="mgmt-option-desc">Sigue en el Cuadro de Mando pero no aparece en el Portal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opciones de trimestre -->
+    <div class="trimestre-options" id="trimestreOptions">
+      <div class="trim-opt" onclick="selectTrimestre('Q1 · Ene–Mar 2026', this)">Q1 · Ene–Mar 2026</div>
+      <div class="trim-opt" onclick="selectTrimestre('Q2 · Abr–Jun 2026', this)">Q2 · Abr–Jun 2026</div>
+      <div class="trim-opt" onclick="selectTrimestre('Q3 · Jul–Sep 2026', this)">Q3 · Jul–Sep 2026</div>
+      <div class="trim-opt" onclick="selectTrimestre('Q4 · Oct–Dic 2026', this)">Q4 · Oct–Dic 2026</div>
+    </div>
+
+    <!-- Motivo (para cancelación) -->
+    <div id="mgmtMotivoWrap" style="display:none;margin-top:12px">
+      <label class="form-label">Motivo (opcional)</label>
+      <textarea id="mgmtMotivo" class="form-textarea" rows="2" placeholder="¿Por qué se cancela o pausa?"></textarea>
+    </div>
+
+    <div class="form-actions" style="margin-top:20px">
+      <button class="btn btn-primary" id="btnApplyMgmt" onclick="applyMgmtAction()" disabled>Aplicar cambio</button>
+      <button class="btn btn-secondary" onclick="closeMgmtModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Selection Toolbar (bottom floating bar) -->
+<div class="selection-toolbar" id="selectionToolbar">
+  <span class="sel-toolbar-count" id="selCount">0 proyectos seleccionados</span>
+  <div class="sel-toolbar-divider"></div>
+  <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2)"
+          onclick="openMgmtModal()">⚙ Gestionar selección</button>
+  <button class="btn btn-sm" style="background:transparent;color:rgba(255,255,255,0.6);border:none"
+          onclick="clearSelection()">✕ Deseleccionar</button>
 </div>
 
 <!-- TOAST -->
@@ -2592,6 +3116,8 @@ function renderProjectCard(project) {
 
   return `
     <div class="project-card" onclick="openDetailModal('${project.id}')">
+      <div class="card-select-check" data-pid="${project.id}"
+           onclick="toggleCardSelect(event, '${project.id}')" title="Seleccionar"></div>
       <div class="card-header">
         <div class="card-icon" style="background:${type.color}22">${type.icono}</div>
         <div>
@@ -2618,14 +3144,324 @@ function renderProjectCard(project) {
     </div>`;
 }
 
-function renderCuadro() {
+/* ================================================================
+   CUADRO DE MANDO — VISTA EJECUTIVA
+================================================================ */
+async function renderCuadro() {
   const container = document.getElementById('cuadroContent');
-  if (!state.projects.length) {
-    container.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
+  container.innerHTML = '<div class="loading-state"><div class="spinner"></div> Cargando datos...</div>';
+
+  const projects = state.projects; // all including cancelled
+  if (!projects.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><div class="empty-state-title">Sin proyectos</div></div>';
     return;
   }
-  container.innerHTML = `<div class="cards-grid">${state.projects.map(renderProjectCard).join('')}</div>`;
+
+  // Load weekly plan data for current week to get cumplimiento
+  const { key: weekKey } = getWeekKey(0);
+  let weekData = {}; // { projectId: { completed, total, avgCumpl } }
+
+  try {
+    const plans = await api.get('plan_semana', `semana=eq.${weekKey}`);
+    await Promise.all(plans.map(async plan => {
+      const items = await api.get('plan_semana_items', `plan_id=eq.${plan.id}`);
+      const validItems = items.filter(i => i.descripcion?.trim());
+      const completed  = validItems.filter(i => i.completado).length;
+      const cumplValues= validItems.filter(i => i.cumplimiento != null).map(i => i.cumplimiento);
+      const avgCumpl   = cumplValues.length
+        ? Math.round(cumplValues.reduce((a, b) => a + b, 0) / cumplValues.length)
+        : null;
+      weekData[plan.proyecto_id] = { completed, total: validItems.length, avgCumpl };
+    }));
+  } catch { /* skip if no plan data */ }
+
+  // Calculate semaphore for each project
+  function getSemaforo(project) {
+    return getSemaforoConAlcance(project, weekData);
+  }
+
+  // KPIs
+  const activos    = projects.filter(p => p.activo !== false && p.estado !== 'Cancelado');
+  const verdes     = activos.filter(p => getSemaforo(p) === 'verde').length;
+  const amarillos  = activos.filter(p => getSemaforo(p) === 'amarillo').length;
+  const rojos      = activos.filter(p => getSemaforo(p) === 'rojo').length;
+  const avgAvance  = activos.length
+    ? Math.round(activos.reduce((s, p) => s + (p.avance || 0), 0) / activos.length)
+    : 0;
+  const cumplValues= Object.values(weekData)
+    .filter(d => d.avgCumpl != null).map(d => d.avgCumpl);
+  const avgCumpl   = cumplValues.length
+    ? Math.round(cumplValues.reduce((a, b) => a + b, 0) / cumplValues.length)
+    : null;
+
+  document.getElementById('kpi-total').textContent        = activos.length;
+  document.getElementById('kpi-verde').textContent        = verdes;
+  document.getElementById('kpi-amarillo').textContent     = amarillos;
+  document.getElementById('kpi-rojo').textContent         = rojos;
+  document.getElementById('kpi-avance').textContent       = avgAvance + '%';
+  document.getElementById('kpi-cumplimiento').textContent = avgCumpl != null ? avgCumpl + '%' : '—';
+  document.getElementById('cuadroSubtitle').textContent   =
+    `Vista ejecutiva · Semana ${weekKey} · ${new Date().toLocaleDateString('es-CO',{weekday:'long',day:'2-digit',month:'long'})}`;
+
+  // Group by estado for ordering: En curso → En desarrollo → Pausado → Completado → Cancelado
+  const orderMap = { 'En curso': 0, 'En desarrollo': 1, 'Pausado': 2, 'Completado': 3, 'Cancelado': 4 };
+  const sorted   = [...projects].sort((a, b) =>
+    (orderMap[a.estado] ?? 5) - (orderMap[b.estado] ?? 5));
+
+  const rows = sorted.map(project => {
+    const type     = getType(project.tipo_id);
+    const sem      = getSemaforo(project);
+    const wInfo    = weekData[project.id];
+    const pct      = project.avance || 0;
+    const isCancelled = project.estado === 'Cancelado';
+
+    const semHtml = {
+      verde:    `<span class="semaforo semaforo-verde">  <div class="semaforo-dot dot-verde"></div>En tiempo</span>`,
+      amarillo: `<span class="semaforo semaforo-amarillo"><div class="semaforo-dot dot-amarillo"></div>En riesgo</span>`,
+      rojo:     `<span class="semaforo semaforo-rojo">   <div class="semaforo-dot dot-rojo"></div>Crítico</span>`,
+      gris:     `<span class="semaforo semaforo-gris">   <div class="semaforo-dot dot-gris"></div>${project.estado}</span>`,
+    }[sem];
+
+    const cumplHtml = wInfo?.avgCumpl != null
+      ? `<span class="cumpl-badge ${wInfo.avgCumpl >= 80 ? 'cumpl-alto' : wInfo.avgCumpl >= 50 ? 'cumpl-medio' : 'cumpl-bajo'}">${wInfo.avgCumpl}%</span>`
+      : `<span class="cumpl-none">Sin datos</span>`;
+
+    const tareasHtml = wInfo
+      ? `${wInfo.completed}/${wInfo.total} tareas`
+      : `<span style="color:var(--text-3)">Sin plan</span>`;
+
+    const estadoBadge = {
+      'En curso':      'badge-en-curso',
+      'En desarrollo': 'badge-en-desarrollo',
+      'Completado':    'badge-completado',
+      'Pausado':       'badge-pausado',
+      'Cancelado':     'badge-cancelado'
+    }[project.estado] || 'badge-en-curso';
+
+    return `
+      <tr class="${isCancelled ? 'row-cancelado' : ''}">
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:8px;background:${type.color}22;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${type.icono}</div>
+            <div>
+              <div style="font-weight:700;font-size:13px">${project.nombre}</div>
+              <div style="font-size:11px;color:var(--text-3)">${project.codigo || '—'} · ${type.nombre}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge ${estadoBadge}">${project.estado || '—'}</span></td>
+        <td>${semHtml}</td>
+        <td>
+          <div class="mini-prog-wrap">
+            <div class="mini-prog-track"><div class="mini-prog-fill" style="width:${pct}%"></div></div>
+            <div class="mini-prog-label">${pct}%</div>
+          </div>
+        </td>
+        <td style="text-align:center">${cumplHtml}</td>
+        <td style="color:var(--text-2)">${tareasHtml}</td>
+        <td><span class="badge badge-trimestre" style="font-size:10px">${project.trimestre ? project.trimestre.split('·')[0].trim() : '—'}</span></td>
+        <td style="color:var(--text-3);font-size:12px">${project.ejecutor || '—'}</td>
+        <td>
+          <div class="table-actions">
+            <button class="btn btn-secondary btn-xs" onclick="openDetailModal('${project.id}')">Ver</button>
+            <button class="btn btn-xs" style="background:var(--bg-subtle);border:1px solid var(--border-dark);color:var(--text-2)"
+                    onclick="openMgmtSingle('${project.id}')">⚙</button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div style="overflow-x:auto;border-radius:var(--radius);box-shadow:var(--shadow)">
+      <table class="cuadro-table">
+        <thead>
+          <tr>
+            <th style="min-width:220px">Proyecto</th>
+            <th>Estado</th>
+            <th>Semáforo</th>
+            <th style="min-width:140px">Avance</th>
+            <th style="text-align:center">Cumpl. sem.</th>
+            <th>Tareas sem.</th>
+            <th>Trimestre</th>
+            <th>Ejecutor</th>
+            <th style="width:90px">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div style="font-size:11px;color:var(--text-3);margin-top:12px;text-align:right">
+      🟢 En tiempo: avance ≥75% o cumpl. ≥80% · 🟡 En riesgo: avance 40–74% o cumpl. 50–79% · 🔴 Crítico: avance &lt;40% o cumpl. &lt;50%
+    </div>`;
 }
+
+/* ================================================================
+   PROJECT SELECTION & MANAGEMENT
+================================================================ */
+const mgmt = {
+  selectedIds:  new Set(),
+  action:       null,    // 'trimestre' | 'cancelar' | 'pausar' | 'ocultar'
+  trimestre:    null,
+  singleId:     null
+};
+
+// Toggle card selection from portal
+function toggleCardSelect(event, projectId) {
+  event.stopPropagation();
+  if (mgmt.selectedIds.has(projectId)) {
+    mgmt.selectedIds.delete(projectId);
+  } else {
+    mgmt.selectedIds.add(projectId);
+  }
+  updateSelectionUI();
+}
+
+function clearSelection() {
+  mgmt.selectedIds.clear();
+  updateSelectionUI();
+  renderPortal();
+}
+
+function updateSelectionUI() {
+  const count   = mgmt.selectedIds.size;
+  const toolbar = document.getElementById('selectionToolbar');
+  document.getElementById('selCount').textContent =
+    `${count} proyecto${count !== 1 ? 's' : ''} seleccionado${count !== 1 ? 's' : ''}`;
+  toolbar.classList.toggle('open', count > 0);
+
+  // Update checkboxes in cards
+  document.querySelectorAll('.card-select-check').forEach(el => {
+    const pid = el.dataset.pid;
+    el.classList.toggle('checked', mgmt.selectedIds.has(pid));
+    el.textContent = mgmt.selectedIds.has(pid) ? '✓' : '';
+  });
+}
+
+// Open mgmt modal for multiple selected
+function openMgmtModal() {
+  if (!mgmt.selectedIds.size) return;
+  mgmt.singleId = null;
+  mgmt.action   = null;
+  mgmt.trimestre= null;
+
+  const names = [...mgmt.selectedIds]
+    .map(id => state.projects.find(p => p.id === id)?.nombre || id)
+    .join(', ');
+  document.getElementById('mgmtProjectNames').textContent = `Proyectos: ${names}`;
+
+  resetMgmtModal();
+  document.getElementById('overlayMgmt').classList.add('open');
+}
+
+// Open mgmt modal for single project (from cuadro)
+function openMgmtSingle(projectId) {
+  mgmt.singleId  = projectId;
+  mgmt.action    = null;
+  mgmt.trimestre = null;
+  const project  = state.projects.find(p => p.id === projectId);
+  document.getElementById('mgmtProjectNames').textContent = `Proyecto: ${project?.nombre || '—'}`;
+  resetMgmtModal();
+  document.getElementById('overlayMgmt').classList.add('open');
+}
+
+function resetMgmtModal() {
+  mgmt.action   = null;
+  mgmt.trimestre= null;
+  document.querySelectorAll('.mgmt-option').forEach(el => el.classList.remove('selected','danger'));
+  document.getElementById('trimestreOptions').classList.remove('open');
+  document.querySelectorAll('.trim-opt').forEach(el => el.classList.remove('selected'));
+  document.getElementById('mgmtMotivoWrap').style.display = 'none';
+  document.getElementById('mgmtMotivo').value = '';
+  document.getElementById('btnApplyMgmt').disabled = true;
+}
+
+function closeMgmtModal() {
+  document.getElementById('overlayMgmt').classList.remove('open');
+}
+
+function selectMgmtAction(action) {
+  mgmt.action   = action;
+  mgmt.trimestre= null;
+
+  document.querySelectorAll('.mgmt-option').forEach(el => el.classList.remove('selected','danger'));
+  const el = document.getElementById(`mgmt-opt-${action}`);
+  el.classList.add('selected');
+  if (action === 'cancelar') el.classList.add('danger');
+
+  // Show/hide sub-options
+  const trOpts  = document.getElementById('trimestreOptions');
+  const motivoW = document.getElementById('mgmtMotivoWrap');
+
+  trOpts.classList.toggle('open', action === 'trimestre');
+  motivoW.style.display = (action === 'cancelar' || action === 'pausar') ? 'block' : 'none';
+
+  // Enable apply only if action doesn't need a trimestre
+  document.getElementById('btnApplyMgmt').disabled = (action === 'trimestre');
+}
+
+function selectTrimestre(value, btn) {
+  mgmt.trimestre = value;
+  document.querySelectorAll('.trim-opt').forEach(el => el.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('btnApplyMgmt').disabled = false;
+}
+
+async function applyMgmtAction() {
+  const ids = mgmt.singleId ? [mgmt.singleId] : [...mgmt.selectedIds];
+  if (!ids.length || !mgmt.action) return;
+
+  const btn = document.getElementById('btnApplyMgmt');
+  btn.disabled    = true;
+  btn.textContent = 'Aplicando...';
+
+  const motivo = document.getElementById('mgmtMotivo').value || null;
+
+  try {
+    for (const id of ids) {
+      const patch = {};
+
+      if (mgmt.action === 'trimestre') {
+        patch.trimestre = mgmt.trimestre;
+      } else if (mgmt.action === 'cancelar') {
+        patch.estado  = 'Cancelado';
+        patch.activo  = false;
+        if (motivo) patch.datos = {
+          ...(state.projects.find(p => p.id === id)?.datos || {}),
+          motivo_cancelacion: motivo
+        };
+      } else if (mgmt.action === 'pausar') {
+        patch.estado = 'Pausado';
+        if (motivo) patch.datos = {
+          ...(state.projects.find(p => p.id === id)?.datos || {}),
+          motivo_pausa: motivo
+        };
+      } else if (mgmt.action === 'ocultar') {
+        patch.activo = false;
+      }
+
+      await api.patch('proyectos', id, patch);
+
+      // Update local state
+      const p = state.projects.find(x => x.id === id);
+      if (p) Object.assign(p, patch);
+    }
+
+    const labels = { trimestre: `Trimestre cambiado a ${mgmt.trimestre}`, cancelar: 'Proyecto(s) cancelado(s)', pausar: 'Proyecto(s) pausado(s)', ocultar: 'Proyecto(s) ocultado(s)' };
+    showToast(labels[mgmt.action] + ' ✓', 'success');
+
+    closeMgmtModal();
+    clearSelection();
+    await loadAll();
+
+  } catch (err) {
+    showToast('Error: ' + err.message, 'error');
+  }
+
+  btn.disabled    = false;
+  btn.textContent = 'Aplicar cambio';
+}
+
+
 
 function updateStats() {
   const visible = state.projects.filter(p => p.activo !== false);
@@ -3083,97 +3919,195 @@ async function deleteWeekItem(itemId) {
 }
 
 /* ================================================================
-   TAB: ACTIVIDADES
+   TAB: ACTIVIDADES — con control de alcance
 ================================================================ */
 function calcProgress(activities) {
-  const total     = activities.length;
-  const done      = activities.filter(a => a.completada || a.estado === 'finalizado').length;
-  const inProgress= activities.filter(a => a.estado === 'en-proceso' && !a.completada).length;
-  const pending   = total - done - inProgress;
-  const pct       = total > 0 ? Math.round(done / total * 100) : 0;
+  const total      = activities.length;
+  const done       = activities.filter(a => a.completada || a.estado === 'finalizado').length;
+  const inProgress = activities.filter(a => a.estado === 'en-proceso' && !a.completada).length;
+  const pending    = total - done - inProgress;
+  const pct        = total > 0 ? Math.round(done / total * 100) : 0;
   return { total, done, inProgress, pending, pct };
 }
 
-function renderTabActividades(project) {
+function calcProgressWeighted(activities) {
+  // Weight baseline = 1, ampliado = 1 (same weight by default, peso field adjustable)
+  const baseline = activities.filter(a => a.alcance !== 'ampliado');
+  const ampliado = activities.filter(a => a.alcance === 'ampliado');
+  const bProg    = calcProgress(baseline);
+  const aProg    = calcProgress(ampliado);
+  const global   = calcProgress(activities);
+  return { global, baseline: bProg, ampliado: aProg };
+}
+
+async function renderTabActividades(project) {
+  // Load scope changes
+  let scopeChanges = [];
+  try {
+    scopeChanges = await api.get('cambios_alcance',
+      `proyecto_id=eq.${project.id}&order=created_at.asc`);
+  } catch { /* optional */ }
+
+  const acts      = state.currentActivities;
+  const hasScope  = scopeChanges.length > 0;
+  const hasAmpliado = acts.some(a => a.alcance === 'ampliado');
+
+  // Group by periodo
+  const periodos  = [...new Set(acts.map(a => a.periodo || 'Sin período').filter(Boolean))];
+  const { global, baseline, ampliado } = calcProgressWeighted(acts);
+
+  // Determine which trimestres are "closed" (all activities done)
+  const trimestreStatus = {};
+  periodos.forEach(per => {
+    const perActs = acts.filter(a => (a.periodo || 'Sin período') === per);
+    const prog    = calcProgress(perActs);
+    trimestreStatus[per] = prog;
+  });
+
+  // Filter
   const filtered = state.currentPeriodFilter === 'todos'
-    ? state.currentActivities
-    : state.currentActivities.filter(a => a.periodo === state.currentPeriodFilter);
+    ? acts
+    : acts.filter(a => (a.periodo || 'Sin período') === state.currentPeriodFilter);
 
-  const allProg     = calcProgress(state.currentActivities);
-  const filtered_prog = calcProgress(filtered);
-
-  // Unique periods
-  const periods = [...new Set(state.currentActivities.map(a => a.periodo).filter(Boolean))];
-
-  const activitiesHtml = filtered.length
-    ? filtered.map((act, idx) => renderActivityItem(act, idx)).join('')
-    : '<div style="font-size:13px;color:var(--text-3);padding:16px;text-align:center">No hay actividades para este período</div>';
+  const filtProg = calcProgress(filtered);
 
   document.getElementById('md-body').innerHTML = `
+
+    <!-- PROGRESO GLOBAL CON DESGLOSE DE ALCANCE -->
     <div class="modal-progress">
       <div class="modal-prog-header">
         <div>
-          <div class="modal-prog-label">Avance del proyecto</div>
+          <div class="modal-prog-label">Avance global del proyecto</div>
           <div class="modal-prog-sublabel">
-            ${state.currentPeriodFilter !== 'todos' ? `Filtrado por: ${state.currentPeriodFilter}` : 'Todos los períodos'}
-            · Total global: ${allProg.done}/${allProg.total} (${allProg.pct}%)
+            Baseline: ${baseline.done}/${baseline.total} completadas
+            ${hasAmpliado ? ` · Ampliado: ${ampliado.done}/${ampliado.total} completadas` : ''}
           </div>
         </div>
-        <div class="modal-prog-pct">${filtered_prog.pct}%</div>
+        <div class="modal-prog-pct">${global.pct}%</div>
       </div>
+      ${hasAmpliado ? `
+      <div class="dual-progress-track" style="margin-bottom:6px" title="Azul = Baseline · Amarillo = Ampliado">
+        <div class="dual-progress-baseline"
+          style="width:${baseline.total > 0 ? Math.round(baseline.done/baseline.total*100) : 0}%"></div>
+        <div class="dual-progress-ampliado"
+          style="width:${ampliado.total > 0 ? Math.round(ampliado.done/ampliado.total*100) : 0}%"></div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;color:var(--text-3);margin-bottom:4px">
+        <span style="display:flex;align-items:center;gap:4px">
+          <span style="width:10px;height:10px;border-radius:2px;background:var(--accent);display:inline-block"></span>
+          Baseline ${baseline.pct}%
+        </span>
+        <span style="display:flex;align-items:center;gap:4px">
+          <span style="width:10px;height:10px;border-radius:2px;background:#f59e0b;display:inline-block"></span>
+          Ampliado ${ampliado.pct}%
+        </span>
+      </div>` : `
       <div class="modal-prog-track">
-        <div class="modal-prog-fill" style="width:${filtered_prog.pct}%"></div>
+        <div class="modal-prog-fill" style="width:${global.pct}%"></div>
+      </div>`}
+    </div>
+
+    <!-- ALERTA DE CAMBIO DE ALCANCE (si hay) -->
+    ${hasScope ? `
+    <div class="scope-alert">
+      <div class="scope-alert-icon">📐</div>
+      <div class="scope-alert-text">
+        <div class="scope-alert-title">Este proyecto tiene ${scopeChanges.length} cambio${scopeChanges.length>1?'s':''} de alcance registrado${scopeChanges.length>1?'s':''}</div>
+        ${scopeChanges.map(sc => `
+          <div style="margin-top:4px">
+            · <strong>${sc.fecha}</strong>: ${sc.descripcion}
+            ${sc.trimestre_destino ? `→ actividades en <strong>${sc.trimestre_destino}</strong>` : ''}
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
+
+    <!-- AVANCE POR TRIMESTRE -->
+    <div style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <span class="section-label" style="margin-bottom:0">Avance por trimestre</span>
+        <button class="btn btn-xs" style="background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-border)"
+                onclick="openScopeModal()">📐 Ampliar alcance</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${periodos.map(per => {
+          const prog   = trimestreStatus[per];
+          const isFull = prog.pct === 100;
+          const cls    = isFull ? 'trimestre-closed-100' : prog.done > 0 ? 'trimestre-closed-part' : 'trimestre-open';
+          const lbl    = isFull ? '✓ Cerrado' : prog.done > 0 ? 'En curso' : 'Pendiente';
+          const perActs= acts.filter(a => (a.periodo||'Sin período') === per);
+          const bActs  = perActs.filter(a => a.alcance !== 'ampliado').length;
+          const aActs  = perActs.filter(a => a.alcance === 'ampliado').length;
+          return `
+          <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:12px;font-weight:700;color:var(--text-2)">${per}</span>
+                ${aActs > 0 ? `<span class="alcance-badge alcance-ampliado">+${aActs} ampliado</span>` : ''}
+                ${bActs > 0 ? `<span class="alcance-badge alcance-baseline">${bActs} baseline</span>` : ''}
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--accent)">${prog.pct}%</span>
+                <span class="trimestre-closed-badge ${cls}">${lbl}</span>
+                ${isFull && !hasScope ? `
+                <button class="btn btn-xs" style="background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-border);font-size:10px"
+                        onclick="openScopeModal()">Ampliar</button>` : ''}
+              </div>
+            </div>
+            <div class="progress-track" style="height:4px">
+              <div class="progress-fill" style="width:${prog.pct}%"></div>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);margin-top:4px">
+              ${prog.done} completadas · ${prog.inProgress} en proceso · ${prog.pending} pendientes de ${prog.total} totales
+            </div>
+          </div>`;
+        }).join('')}
       </div>
     </div>
 
-    <!-- Filtro por período -->
+    <!-- FILTRO POR PERÍODO -->
     <div class="period-selector">
-      <button class="period-btn ${state.currentPeriodFilter === 'todos' ? 'active' : ''}"
-              onclick="setPeriodFilter('todos', this)">Todos los períodos</button>
-      ${periods.map(p => `
-        <button class="period-btn ${state.currentPeriodFilter === p ? 'active' : ''}"
-                onclick="setPeriodFilter('${p}', this)">${p}</button>`).join('')}
+      <button class="period-btn ${state.currentPeriodFilter==='todos'?'active':''}"
+              onclick="setPeriodFilter('todos',this)">Todos</button>
+      ${periodos.map(p => `
+        <button class="period-btn ${state.currentPeriodFilter===p?'active':''}"
+                onclick="setPeriodFilter('${p}',this)">${p}</button>`).join('')}
     </div>
 
-    <!-- Breakdown -->
+    <!-- BREAKDOWN -->
     <div class="progress-breakdown">
-      <div class="breakdown-item">
-        <div class="breakdown-value green">${filtered_prog.done}</div>
-        <div class="breakdown-label">✓ Finalizadas</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-value orange">${filtered_prog.inProgress}</div>
-        <div class="breakdown-label">⟳ En Proceso</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-value gray">${filtered_prog.pending}</div>
-        <div class="breakdown-label">○ Sin Iniciar</div>
-      </div>
+      <div class="breakdown-item"><div class="breakdown-value green">${filtProg.done}</div><div class="breakdown-label">✓ Finalizadas</div></div>
+      <div class="breakdown-item"><div class="breakdown-value orange">${filtProg.inProgress}</div><div class="breakdown-label">⟳ En Proceso</div></div>
+      <div class="breakdown-item"><div class="breakdown-value gray">${filtProg.pending}</div><div class="breakdown-label">○ Sin Iniciar</div></div>
     </div>
 
-    <!-- Lista -->
+    <!-- LISTA -->
     <div class="activities-header">
       <span class="activities-title">
-        ACTIVIDADES — ${filtered_prog.done}/${filtered_prog.total} COMPLETADAS
+        ACTIVIDADES — ${filtProg.done}/${filtProg.total} COMPLETADAS
+        ${state.currentPeriodFilter !== 'todos' ? `· ${state.currentPeriodFilter}` : ''}
       </span>
       <button class="btn btn-primary btn-xs" onclick="openActivityModal(null)">+ Agregar</button>
     </div>
     <div class="activities-list" id="activitiesList">
-      ${activitiesHtml}
+      ${filtered.length
+        ? filtered.map((act, idx) => renderActivityItem(act, idx)).join('')
+        : '<div style="font-size:13px;color:var(--text-3);padding:16px;text-align:center">No hay actividades para este período</div>'}
     </div>`;
 }
 
 function renderActivityItem(activity, idx) {
-  const isDone      = activity.completada || activity.estado === 'finalizado';
-  const isInProgress= activity.estado === 'en-proceso';
-  const statusClass = isDone ? 'status-finalizado' : isInProgress ? 'status-en-proceso' : 'status-sin-iniciar';
-  const statusLabel = isDone ? 'Finalizado' : isInProgress ? 'En Proceso' : 'Sin Iniciar';
+  const isDone       = activity.completada || activity.estado === 'finalizado';
+  const isInProgress = activity.estado === 'en-proceso';
+  const statusClass  = isDone ? 'status-finalizado' : isInProgress ? 'status-en-proceso' : 'status-sin-iniciar';
+  const statusLabel  = isDone ? 'Finalizado' : isInProgress ? 'En Proceso' : 'Sin Iniciar';
+  const isAmpliado   = activity.alcance === 'ampliado';
 
   return `
     <div class="activity-item">
       <span class="activity-num">${String(idx + 1).padStart(2, '0')}</span>
-      <span class="activity-name">${activity.descripcion}</span>
+      <span class="activity-name" style="${isDone ? 'text-decoration:line-through;color:var(--text-3)' : ''}">${activity.descripcion}</span>
       ${activity.periodo ? `<span class="activity-period">${activity.periodo}</span>` : ''}
+      ${isAmpliado ? `<span class="alcance-badge alcance-ampliado">Ampliado</span>` : ''}
       <span class="activity-responsible">${activity.responsable || ''}</span>
       <button class="activity-status ${statusClass}" onclick="cycleActivityStatus('${activity.id}')">${statusLabel}</button>
       <div class="activity-actions">
@@ -3182,6 +4116,8 @@ function renderActivityItem(activity, idx) {
       </div>
     </div>`;
 }
+
+
 
 function setPeriodFilter(period, btn) {
   state.currentPeriodFilter = period;
@@ -3231,6 +4167,7 @@ function openActivityModal(activityId) {
       document.getElementById('act-resp').value    = act.responsable || '';
       document.getElementById('act-estado').value  = act.estado || (act.completada ? 'finalizado' : 'sin-iniciar');
       document.getElementById('act-periodo').value = act.periodo || 'Q1 · 2026';
+      document.getElementById('act-alcance').value = act.alcance || 'baseline';
       document.getElementById('act-peso').value    = act.peso || 1;
     }
   } else {
@@ -3238,6 +4175,7 @@ function openActivityModal(activityId) {
     document.getElementById('act-resp').value    = '';
     document.getElementById('act-estado').value  = 'sin-iniciar';
     document.getElementById('act-periodo').value = 'Q1 · 2026';
+    document.getElementById('act-alcance').value = 'baseline';
     document.getElementById('act-peso').value    = 1;
   }
 
@@ -3263,6 +4201,7 @@ async function saveActivity() {
     estado,
     completada:  estado === 'finalizado',
     periodo:     document.getElementById('act-periodo').value,
+    alcance:     document.getElementById('act-alcance').value || 'baseline',
     peso:        parseInt(document.getElementById('act-peso').value) || 1
   };
 
@@ -4131,6 +5070,100 @@ function escHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+/* ================================================================
+   CONTROL DE ALCANCE — CAMBIOS FORMALES
+================================================================ */
+function openScopeModal() {
+  const project = state.projects.find(p => p.id === state.currentProjectId);
+
+  // Pre-fill trimestre origen with current project trimestre
+  const origenSel = document.getElementById('scope-origen');
+  if (origenSel && project?.trimestre) {
+    // Map "Q1 · Ene–Mar 2026" → "Q1 · Ene–Mar 2026"
+    const opts = Array.from(origenSel.options);
+    const match = opts.find(o => o.value === project.trimestre);
+    if (match) origenSel.value = project.trimestre;
+  }
+
+  // Set today's date
+  document.getElementById('scope-fecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('scope-desc').value  = '';
+  document.getElementById('scope-quien').value = '';
+  document.getElementById('overlayScope').classList.add('open');
+}
+
+function closeScopeModal() {
+  document.getElementById('overlayScope').classList.remove('open');
+}
+
+async function saveScopeChange() {
+  const desc = document.getElementById('scope-desc').value.trim();
+  if (!desc) { showToast('La descripción es requerida', 'error'); return; }
+
+  const btn = document.getElementById('btnSaveScope');
+  btn.disabled    = true;
+  btn.textContent = 'Guardando...';
+
+  try {
+    await api.post('cambios_alcance', {
+      proyecto_id:       state.currentProjectId,
+      fecha:             document.getElementById('scope-fecha').value || new Date().toISOString().split('T')[0],
+      trimestre_origen:  document.getElementById('scope-origen').value,
+      trimestre_destino: document.getElementById('scope-destino').value,
+      descripcion:       desc,
+      registrado_por:    document.getElementById('scope-quien').value || null
+    });
+
+    showToast('Cambio de alcance registrado ✓', 'success');
+    closeScopeModal();
+
+    // Re-render activities tab to show the new scope change
+    const project = state.projects.find(p => p.id === state.currentProjectId);
+    await renderTabActividades(project);
+
+  } catch (err) {
+    showToast('Error: ' + err.message, 'error');
+  }
+
+  btn.disabled    = false;
+  btn.textContent = 'Registrar cambio de alcance';
+}
+
+/* ================================================================
+   CUADRO DE MANDO — semaphore update for scope-aware projects
+================================================================ */
+function getSemaforoConAlcance(project, weekData) {
+  const estado = project.estado || '';
+  if (estado === 'Cancelado')  return 'gris';
+  if (estado === 'Completado') return 'verde';
+  if (estado === 'Pausado')    return 'amarillo';
+
+  const pct   = project.avance || 0;
+  const wInfo = weekData[project.id];
+  const cumpl = wInfo?.avgCumpl;
+
+  // A project with scope expansion shouldn't be penalized for having <100%
+  // if the baseline was completed — check avance_trimestres
+  const trimestres   = project.avance_trimestres || {};
+  const anyTrimClosed = Object.values(trimestres).some(v => v >= 100);
+
+  let score = 0;
+  if (anyTrimClosed) score += 1; // Bonus: at least one trimestre completed
+
+  if (pct >= 75)       score += 2;
+  else if (pct >= 40)  score += 1;
+
+  if (cumpl != null) {
+    if (cumpl >= 80)      score += 2;
+    else if (cumpl >= 50) score += 1;
+    else                  score -= 1;
+  }
+
+  if (score >= 3) return 'verde';
+  if (score >= 1) return 'amarillo';
+  return 'rojo';
 }
 
 /* ================================================================
